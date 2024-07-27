@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:alpha_go/set_password.dart';
 import 'package:alpha_go/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:bdk_flutter/bdk_flutter.dart';
-import 'package:flutter/widgets.dart';
 
 class EnterWalletMnemonic extends StatefulWidget {
   const EnterWalletMnemonic({super.key});
@@ -20,12 +18,12 @@ class _EnterWalletMnemonicState extends State<EnterWalletMnemonic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Enter your Seed Phrase"),
+        title: const Text("Enter your Seed Phrase"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
+          const Text(
               "Enter your wallet's private Seed Phrase with Spaces between each phrase. This is the unique key to your wallet."),
           TextFieldContainer(
             child: TextFormField(
@@ -47,7 +45,7 @@ class _EnterWalletMnemonicState extends State<EnterWalletMnemonic> {
                           )),
                 );
               },
-              child: Text("Continue")),
+              child: const Text("Continue")),
         ],
       ),
     );

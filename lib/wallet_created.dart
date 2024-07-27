@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:alpha_go/homepage.dart';
-import 'package:alpha_go/wallet_balance.dart';
+import 'package:alpha_go/navbar.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +19,7 @@ class WalletCreatedScreen extends StatefulWidget {
 }
 
 class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
+  bool isLoading = false;
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   late Wallet wallet;
@@ -29,7 +30,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
     final res = "Total Balance: ${balanceObj.total.toString()}";
     log(res);
     setState(() {
-      balance.text = balanceObj.total.toString();
+      balance.text = "${balanceObj.total} Sats";
     });
   }
 
@@ -64,7 +65,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
 
   Future<void> blockchainInit() async {
     blockchain = await Blockchain.create(
-        config: BlockchainConfig.esplora(
+        config: const BlockchainConfig.esplora(
             config: EsploraConfig(
       baseUrl: "https://blockstream.info/testnet/api",
       stopGap: 5,
@@ -85,7 +86,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
       var addressInfo =
           await res.getAddress(addressIndex: const AddressIndex());
       setState(() {
-        address.text = addressInfo.address;
+        address.text = "Your Wallet Address is: ${addressInfo.address}";
         wallet = res;
         // displayText = "Wallet Created: $address";
       });
@@ -98,53 +99,65 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     createOrRestoreWallet(widget.mnemonic, Network.Testnet, widget.password);
+    syncWallet();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Center(
-              child: Text("Congratulations your wallet is " +
-                  (widget.isImport ? "imported" : "created"))),
-          TextFormField(
-              readOnly: true,
-              controller: address,
-              maxLines: 5,
-              decoration:
-                  const InputDecoration(hintText: "Enter your mnemonic")),
-          Center(
-            child: TextFormField(
-                controller: balance,
-                readOnly: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: 5,
-                decoration:
-                    const InputDecoration(hintText: "Enter your mnemonic")),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await syncWallet();
-              await getBalance();
-              log("Refreshed");
-            },
-            child: Text("Refresh"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MapHomePage()),
-              );
-            },
-            child: const Text("Continue"),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: Text(
+                          "Congratulations your wallet is ${widget.isImport ? "imported" : "created"}")),
+                  TextFormField(
+                      readOnly: true,
+                      controller: address,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                          hintText: "Wallet Address Loading")),
+                  Center(
+                    child: TextFormField(
+                        controller: balance,
+                        readOnly: true,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
+                        decoration: const InputDecoration(
+                            hintText:
+                                "Please Refresh to fetch wallet balance")),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      //  await syncWallet();
+                      await getBalance();
+                      setState(() {
+                        isLoading = false;
+                      });
+                      log("Refreshed");
+                    },
+                    child: const Text("Refresh"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => NavBar()),
+                      );
+                    },
+                    child: const Text("Continue"),
+                  ),
+                ],
+              ),
       ),
     );
   }

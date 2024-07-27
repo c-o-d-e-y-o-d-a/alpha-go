@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image/image.dart' as img;
@@ -61,7 +60,6 @@ class _MapHomePageState extends State<MapHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       downloadImage(
@@ -121,27 +119,10 @@ class _MapHomePageState extends State<MapHomePage> {
                       maxZoom: 15,
                       markers: [
                         Marker(
-                          point: LatLng(30.65426548694503, 76.85826072220257),
+                          point: const LatLng(
+                              30.65426548694503, 76.85826072220257),
                           child: widget.pointerImage!,
                         ),
-                        Marker(
-                            point: LatLng(28.450700, 77.5841967),
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                            )),
-                        Marker(
-                            point: LatLng(28.450645, 77.5942000),
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                            )),
-                        Marker(
-                            point: LatLng(28.46, 77.5841980),
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                            ))
                       ],
                       builder: (context, markers) {
                         return Container(

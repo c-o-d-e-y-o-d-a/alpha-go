@@ -20,7 +20,7 @@ class _WalletBalanceScreenState extends State<WalletBalanceScreen> {
   Future<void> getBalance() async {
     final balanceObj = await wallet.getBalance();
     final res = "Total Balance: ${balanceObj.total.toString()}";
-    print(res);
+    log(res);
     setState(() {
       balance.text = balanceObj.total.toString();
     });
@@ -32,13 +32,10 @@ class _WalletBalanceScreenState extends State<WalletBalanceScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       wallet = widget.wallet;
     });
-    // syncWallet();
-    // getBalance();
   }
 
   @override

@@ -18,14 +18,14 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Set a Password"),
+          title: const Text("Set a Password"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text("Set a password to secure your wallet."),
+              const Text("Set a password to secure your wallet."),
               TextField(
                 controller: password,
                 decoration: const InputDecoration(

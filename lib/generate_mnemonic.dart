@@ -2,7 +2,6 @@ import 'package:alpha_go/set_password.dart';
 import 'package:alpha_go/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
-import 'package:flutter/widgets.dart';
 
 class GenerateWalletMnemonic extends StatefulWidget {
   const GenerateWalletMnemonic({super.key});
@@ -23,7 +22,6 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     generateMnemonicHandler();
   }
@@ -32,12 +30,12 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Backup your Seed Phrase"),
+        title: const Text("Backup your Seed Phrase"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
+          const Text(
               "Write down your seed phrase and make sure to keep it private. This is the unique key to your wallet."),
           TextFieldContainer(
             child: TextFormField(
@@ -58,7 +56,7 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
                           )),
                 );
               },
-              child: Text("Continue")),
+              child: const Text("Continue")),
         ],
       ),
     );
