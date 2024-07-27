@@ -123,6 +123,11 @@ class _MapHomePageState extends State<MapHomePage> {
                               30.65426548694503, 76.85826072220257),
                           child: widget.pointerImage!,
                         ),
+                        Marker(
+                          point: const LatLng(
+                              36.15720618462996, -86.77819820373395),
+                          child: widget.pointerImage!,
+                        ),
                       ],
                       builder: (context, markers) {
                         return Container(
