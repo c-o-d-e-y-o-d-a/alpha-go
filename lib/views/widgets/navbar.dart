@@ -1,6 +1,6 @@
-import 'package:alpha_go/views/screens/homepage.dart';
+import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/messaging_screen.dart';
-import 'package:alpha_go/views/screens/profilepage.dart';
+import 'package:alpha_go/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 

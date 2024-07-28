@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/models/wallet_model.dart';
 import 'package:alpha_go/views/widgets/navbar.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,11 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await controller.createOrRestoreWallet(Network.Testnet, widget.password);
-      await controller.getAddress().then((value) {
+      await controller
+          .createOrRestoreWallet(Network.Testnet, widget.password)
+          .then((value) {
         setState(() {
-          address.text = value;
+          address.text = controller.address!;
         });
       });
       await controller.syncWallet();
@@ -83,7 +83,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => NavBar());
+                      Get.to(() => const NavBar());
                     },
                     child: const Text("Continue"),
                   ),

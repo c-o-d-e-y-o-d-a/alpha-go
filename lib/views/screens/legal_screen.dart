@@ -1,5 +1,5 @@
-import 'package:alpha_go/views/screens/generate_mnemonic.dart';
-import 'package:alpha_go/views/screens/import_mnemonic.dart';
+import 'package:alpha_go/views/screens/generate_mnemonic_screen.dart';
+import 'package:alpha_go/views/screens/import_mnemonic_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rolling_switch/rolling_switch.dart';

@@ -1,4 +1,4 @@
-import 'package:alpha_go/views/screens/legal_page.dart';
+import 'package:alpha_go/views/screens/legal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

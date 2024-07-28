@@ -1,4 +1,4 @@
-import 'package:alpha_go/views/screens/wallet_created.dart';
+import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

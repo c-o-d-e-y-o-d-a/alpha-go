@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:alpha_go/views/screens/set_password.dart';
+import 'package:alpha_go/views/screens/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +34,7 @@ class _EnterWalletMnemonicState extends State<EnterWalletMnemonic> {
           ElevatedButton(
               onPressed: () {
                 log(mnemonic.text);
-                Get.to(() => SetPasswordScreen(
+                Get.to(() => const SetPasswordScreen(
                       isImport: true,
                     ));
               },

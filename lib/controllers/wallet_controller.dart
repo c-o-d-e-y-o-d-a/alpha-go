@@ -8,6 +8,8 @@ class WalletController extends GetxController {
   late Blockchain blockchain;
   BitcoinWallet? genWallet;
   String? mnemonic;
+  String? address;
+
   Future<void> generateMnemonicHandler() async {
     var res = await Mnemonic.create(WordCount.Words12);
     mnemonic = res.toString();
@@ -57,16 +59,17 @@ class WalletController extends GetxController {
           network: network,
           databaseConfig: const DatabaseConfig.memory());
       genWallet = BitcoinWallet(res);
+      await getAddress();
     } on Exception catch (e) {
       log(e.toString());
       rethrow;
     }
   }
 
-  Future<String> getAddress() async {
+  Future<void> getAddress() async {
     final addressInfo =
         await genWallet!.wallet.getAddress(addressIndex: const AddressIndex());
-    return addressInfo.address;
+    address = addressInfo.address;
   }
 
   Future<int> getBalance() async {

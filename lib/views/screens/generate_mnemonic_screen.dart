@@ -1,5 +1,5 @@
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/views/screens/set_password.dart';
+import 'package:alpha_go/views/screens/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +44,7 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
                   const InputDecoration(hintText: "Enter your mnemonic")),
           ElevatedButton(
               onPressed: () {
-                Get.to(() => SetPasswordScreen());
+                Get.to(() => const SetPasswordScreen());
               },
               child: const Text("Continue")),
         ],
