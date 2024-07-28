@@ -1,10 +1,9 @@
-import 'package:alpha_go/wallet_created.dart';
+import 'package:alpha_go/views/screens/wallet_created.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SetPasswordScreen extends StatefulWidget {
-  const SetPasswordScreen(
-      {super.key, required this.mnemonic, this.isImport = false});
-  final String mnemonic;
+  const SetPasswordScreen({super.key, this.isImport = false});
   final bool isImport;
 
   @override
@@ -41,15 +40,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (password.text == confirmPassword.text) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WalletCreatedScreen(
-                                mnemonic: widget.mnemonic,
-                                password: password.text,
-                                isImport: widget.isImport,
-                              )),
-                    );
+                    Get.to(() => WalletCreatedScreen(
+                          password: password.text,
+                          isImport: widget.isImport,
+                        ));
                   }
                 },
                 child: const Text("Continue"),

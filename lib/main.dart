@@ -1,5 +1,9 @@
-import 'package:alpha_go/login.dart';
+import 'package:alpha_go/views/screens/generate_mnemonic.dart';
+import 'package:alpha_go/views/screens/import_mnemonic.dart';
+import 'package:alpha_go/views/screens/login.dart';
+import 'package:alpha_go/views/screens/wallet_created.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +15,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

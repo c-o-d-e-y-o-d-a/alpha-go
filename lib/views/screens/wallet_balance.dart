@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:alpha_go/widgets.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -45,15 +43,13 @@ class _WalletBalanceScreenState extends State<WalletBalanceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Center(
-            child: TextFieldContainer(
-              child: TextFormField(
-                  controller: balance,
-                  readOnly: true,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 5,
-                  decoration:
-                      const InputDecoration(hintText: "Enter your mnemonic")),
-            ),
+            child: TextFormField(
+                controller: balance,
+                readOnly: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: 5,
+                decoration:
+                    const InputDecoration(hintText: "Enter your mnemonic")),
           ),
           ElevatedButton(
               onPressed: () async {

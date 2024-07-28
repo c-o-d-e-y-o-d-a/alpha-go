@@ -49,6 +49,7 @@ dependencies:
   url_launcher: 
   google_nav_bar: 
   searchfield:
+  get:
 
 dev_dependencies:
   flutter_test:

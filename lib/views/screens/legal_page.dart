@@ -1,6 +1,7 @@
-import 'package:alpha_go/generate_mnemonic.dart';
-import 'package:alpha_go/import_mnemonic.dart';
+import 'package:alpha_go/views/screens/generate_mnemonic.dart';
+import 'package:alpha_go/views/screens/import_mnemonic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rolling_switch/rolling_switch.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -85,13 +86,9 @@ class LegalPage extends StatelessWidget {
             // SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => isGenerate
-                          ? const GenerateWalletMnemonic()
-                          : const EnterWalletMnemonic()),
-                );
+                Get.to(() => isGenerate
+                    ? const GenerateWalletMnemonic()
+                    : const EnterWalletMnemonic());
               },
               child: const Text("Accept"),
             ),

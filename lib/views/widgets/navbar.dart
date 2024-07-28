@@ -1,6 +1,6 @@
-import 'package:alpha_go/homepage.dart';
-import 'package:alpha_go/messaging_screen.dart';
-import 'package:alpha_go/profilepage.dart';
+import 'package:alpha_go/views/screens/homepage.dart';
+import 'package:alpha_go/views/screens/messaging_screen.dart';
+import 'package:alpha_go/views/screens/profilepage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -16,9 +16,9 @@ class _NavBarState extends State<NavBar> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
-    MessagingScreen(),
+    const MessagingScreen(),
     MapHomePage(),
-    ProfilePage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -46,8 +46,8 @@ class _NavBarState extends State<NavBar> {
               gap: 8,
               activeColor: Colors.black,
               iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: Duration(milliseconds: 400),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: const Duration(milliseconds: 400),
               tabBackgroundColor: Colors.grey[100]!,
               color: Colors.black,
               tabs: const [

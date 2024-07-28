@@ -1,5 +1,6 @@
-import 'package:alpha_go/legal_page.dart';
+import 'package:alpha_go/views/screens/legal_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,13 +25,7 @@ class _LoginPageState extends State<LoginPage> {
               const Spacer(),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LegalPage(
-                                isGenerate: false,
-                              )),
-                    );
+                    Get.to(() => const LegalPage(isGenerate: false));
                   },
                   child: const Text("Import an Idenity")),
               const SizedBox(
@@ -38,13 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LegalPage(
-                                isGenerate: true,
-                              )),
-                    );
+                    Get.to(() => const LegalPage(isGenerate: true));
                   },
                   child: const Text("Generate an Identity")),
               const SizedBox(
