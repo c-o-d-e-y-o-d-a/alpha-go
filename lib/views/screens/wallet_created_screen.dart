@@ -1,15 +1,17 @@
 import 'dart:developer';
 
+import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
+import 'package:alpha_go/models/firebase_model.dart';
+import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/widgets/navbar.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletCreatedScreen extends StatefulWidget {
-  const WalletCreatedScreen(
-      {super.key, required this.password, required this.isImport});
-  final String password;
+  const WalletCreatedScreen({super.key, required this.isImport});
   final bool isImport;
   @override
   State<WalletCreatedScreen> createState() => _WalletCreatedScreenState();
@@ -20,19 +22,33 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
+  final UserController userController = Get.find();
+  final SharedPreferences prefs = Get.find();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller
-          .createOrRestoreWallet(Network.Testnet, widget.password)
+          .createOrRestoreWallet(
+        Network.Testnet,
+      )
           .then((value) {
         setState(() {
           address.text = controller.address!;
         });
       });
       await controller.syncWallet();
+      await prefs.setString("mnemonic", controller.mnemonic!);
+      await prefs.setString("password", controller.password!);
+      userController.setUser(User(
+          pfpUrl: "",
+          walletAddress: controller.address!,
+          accountName: "Account 1",
+          bio: "BIO"));
+      await FirebaseUtils.users
+          .doc(controller.address)
+          .set(userController.toJson());
     });
   }
 
@@ -72,7 +88,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                       });
                       await controller.syncWallet();
                       await controller.getBalance().then((value) {
-                        balance.text = "$value Sats";
+                        balance.text = "${controller.balance.toString()} Sats";
                       });
                       setState(() {
                         isLoading = false;

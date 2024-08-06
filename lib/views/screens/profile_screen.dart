@@ -1,3 +1,4 @@
+import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
+  final UserController userController = Get.find();
+  bool isFetchingBalance = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Page"),
+        title: const Text("Profile Page"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -34,26 +37,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 90,
                     backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(userController.user.pfpUrl),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text("Account 1"),
-                  SizedBox(
+                  Text(userController.user.accountName),
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(controller.address!),
-                  SizedBox(
+                  Text(userController.user.walletAddress),
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                      "Vero sit dolor sed gubergren diam duo elitr, erat consetetur at duo ut et dolores. Amet dolor ipsum gubergren rebum."),
-                  SizedBox(height: 20),
+                  Text(userController.user.bio),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(
                         width: 110,
+                        height: 70,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -61,7 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             onPressed: () {},
-                            child: Column(
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Icon(Icons.arrow_upward),
                                 Text("SEND")
@@ -69,7 +74,42 @@ class _ProfilePageState extends State<ProfilePage> {
                             )),
                       ),
                       SizedBox(
+                        width: 115,
+                        height: 70,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              isFetchingBalance = true;
+                            });
+                            await controller.getBalance().then((value) {
+                              setState(() {
+                                isFetchingBalance = false;
+                              });
+                            });
+                          },
+                          child: isFetchingBalance
+                              ? const Center(child: CircularProgressIndicator())
+                              : controller.balance == null
+                                  ? const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(Icons.currency_bitcoin),
+                                        Text("BALANCE")
+                                      ],
+                                    )
+                                  : Text(
+                                      "${controller.balance.toString()} Sats"),
+                        ),
+                      ),
+                      SizedBox(
                         width: 110,
+                        height: 70,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -77,7 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             onPressed: () {},
-                            child: Column(
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Icon(Icons.arrow_downward),
                                 Text("RECIEVE")
@@ -90,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           Expanded(
@@ -110,15 +151,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               Colors.grey.withOpacity(0.2),
                           borderWidth: 0,
                           borderColor: Colors.black,
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
-                          unselectedLabelStyle: TextStyle(
+                          unselectedLabelStyle: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          tabs: [
+                          tabs: const [
                             Tab(
                               text: "INSCRIPTIONS",
                             ),
@@ -127,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ],
                         ),
-                        Expanded(
+                        const Expanded(
                           child: TabBarView(
                             children: <Widget>[Text("Tab1"), Text("Tab2")],
                             // Add your views here

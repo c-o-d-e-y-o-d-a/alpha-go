@@ -7,8 +7,10 @@ import 'package:get/get.dart';
 class WalletController extends GetxController {
   late Blockchain blockchain;
   BitcoinWallet? genWallet;
+  String? password;
   String? mnemonic;
   String? address;
+  int? balance;
 
   Future<void> generateMnemonicHandler() async {
     var res = await Mnemonic.create(WordCount.Words12);
@@ -49,7 +51,9 @@ class WalletController extends GetxController {
     }
   }
 
-  Future<void> createOrRestoreWallet(Network network, String? password) async {
+  Future<void> createOrRestoreWallet(
+    Network network,
+  ) async {
     try {
       final descriptors = await getDescriptors(mnemonic!);
       await blockchainInit();
@@ -72,11 +76,12 @@ class WalletController extends GetxController {
     address = addressInfo.address;
   }
 
-  Future<int> getBalance() async {
+  Future<void> getBalance() async {
+    syncWallet();
     final balanceObj = await genWallet!.wallet.getBalance();
     final res = "Total Balance: ${balanceObj.total.toString()}";
     log(res);
-    return balanceObj.total;
+    balance = balanceObj.total;
   }
 
   Future<void> syncWallet() async {

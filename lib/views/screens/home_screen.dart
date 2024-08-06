@@ -10,15 +10,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapHomePage extends StatefulWidget {
-  MapHomePage({super.key});
-  LatLng? userPos;
-  Image? pointerImage;
+  const MapHomePage({super.key});
 
   @override
   State<MapHomePage> createState() => _MapHomePageState();
 }
 
 class _MapHomePageState extends State<MapHomePage> {
+  LatLng? userPos;
+  Image? pointerImage;
   Future<Image> downloadImage(String imageUrl) async {
     final File imageFile = await DefaultCacheManager().getSingleFile(imageUrl);
     final img.Image originalImage =
@@ -66,12 +66,12 @@ class _MapHomePageState extends State<MapHomePage> {
               "https://btcinc.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0bb6c9f7-9fea-4e75-9a10-2132b25e6c26%2FB24_glyph_vinyl_black.png?table=block&id=51a413cd-839a-4dfc-98fc-d6ad3c6beff8&spaceId=01e1e793-4fae-46aa-9554-5c27f1b12ad6&width=860&userId=&cache=v2")
           .then((value) {
         setState(() {
-          widget.pointerImage = value;
+          pointerImage = value;
         });
       });
       determinePosition().then((value) {
         setState(() {
-          widget.userPos = LatLng(value.latitude, value.longitude);
+          userPos = LatLng(value.latitude, value.longitude);
         });
       });
     });
@@ -83,13 +83,13 @@ class _MapHomePageState extends State<MapHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: widget.userPos == null
+        body: userPos == null
             ? const Center(
                 child: CircularProgressIndicator(),
               )
             : FlutterMap(
                 options: MapOptions(
-                    initialCenter: widget.userPos!,
+                    initialCenter: userPos!,
                     // center: LatLng(59.438484, 24.742595),
                     initialZoom: 14,
                     keepAlive: true),
@@ -105,7 +105,7 @@ class _MapHomePageState extends State<MapHomePage> {
                       alignDirectionOnUpdate: AlignOnUpdate.always,
                       style: LocationMarkerStyle(
                         marker: DefaultLocationMarker(
-                          child: widget.pointerImage,
+                          child: pointerImage,
                         ),
                         markerSize: const Size(30, 30),
                         markerDirection: MarkerDirection.heading,
@@ -121,12 +121,12 @@ class _MapHomePageState extends State<MapHomePage> {
                         Marker(
                           point: const LatLng(
                               30.65426548694503, 76.85826072220257),
-                          child: widget.pointerImage!,
+                          child: pointerImage!,
                         ),
                         Marker(
                           point: const LatLng(
                               36.15720618462996, -86.77819820373395),
-                          child: widget.pointerImage!,
+                          child: pointerImage!,
                         ),
                       ],
                       builder: (context, markers) {
@@ -150,7 +150,7 @@ class _MapHomePageState extends State<MapHomePage> {
           onPressed: () {
             determinePosition().then((value) {
               setState(() {
-                widget.userPos = LatLng(value.latitude, value.longitude);
+                userPos = LatLng(value.latitude, value.longitude);
               });
             });
           },

@@ -18,17 +18,17 @@ class _MessagingScreenState extends State<MessagingScreen> {
       body: const Center(
         child: Column(
           children: [
-            messageWidget(
+            MessageWidget(
               name: "Account 1",
               message: "Last Message",
               time: "Time",
             ),
-            messageWidget(
+            MessageWidget(
               name: "Account 3",
               message: "Last Message",
               time: "Time",
             ),
-            messageWidget(
+            MessageWidget(
               name: "Account 2",
               message: "Last Message",
               time: "Time",

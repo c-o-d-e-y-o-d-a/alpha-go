@@ -12,7 +12,7 @@ class GenerateWalletMnemonic extends StatefulWidget {
 
 class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
   final TextEditingController mnemonic = TextEditingController();
-  final WalletController controller = Get.put(WalletController());
+  final WalletController controller = Get.find();
 
   @override
   void initState() {

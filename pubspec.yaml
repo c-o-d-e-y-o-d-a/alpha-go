@@ -51,6 +51,11 @@ dependencies:
   searchfield:
   get:
   buttons_tabbar:
+  shared_preferences: 
+  cloud_firestore:
+  firebase_core:
+  firebase_messaging:
+  firebase_storage:
 
 dev_dependencies:
   flutter_test:

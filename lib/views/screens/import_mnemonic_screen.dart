@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/screens/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class EnterWalletMnemonic extends StatefulWidget {
 
 class _EnterWalletMnemonicState extends State<EnterWalletMnemonic> {
   TextEditingController mnemonic = TextEditingController();
+  final WalletController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class _EnterWalletMnemonicState extends State<EnterWalletMnemonic> {
           ElevatedButton(
               onPressed: () {
                 log(mnemonic.text);
+                controller.mnemonic = mnemonic.text;
                 Get.to(() => const SetPasswordScreen(
                       isImport: true,
                     ));
