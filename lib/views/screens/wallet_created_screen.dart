@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/firebase_model.dart';
@@ -38,6 +39,15 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
           address.text = controller.address!;
         });
       });
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+          firstName: address.text,
+          id: address.text, // UID from Firebase Authentication
+          imageUrl: 'https://i.pravatar.cc/300',
+
+          // lastName: 'Doe',
+        ),
+      );
       await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
