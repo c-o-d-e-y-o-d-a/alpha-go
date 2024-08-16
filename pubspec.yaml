@@ -55,9 +55,11 @@ dependencies:
   cloud_firestore:
   firebase_core:
   firebase_messaging:
-  firebase_storage:
+  firebase_storage: 
   flutter_firebase_chat_core: 
   flutter_chat_ui: 
+  firebase_auth: 
+  image_picker: 
 
 dev_dependencies:
   flutter_test:

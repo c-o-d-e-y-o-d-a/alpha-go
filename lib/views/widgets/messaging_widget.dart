@@ -20,8 +20,8 @@ class MessageWidget extends StatelessWidget {
       onTap: () async {
         final room = await FirebaseChatCore.instance.createRoom(
           types.User(
-            firstName: 'tb1qg558utpm4p82x6c8dy8v2l3ztcdul8ses88r72',
-            id: "tb1qg558utpm4p82x6c8dy8v2l3ztcdul8ses88r72", // UID from Firebase Authentication
+            firstName: 'tb1qyth54uk72e8m5xu43qwqh78r5atlmp905wzsrc',
+            id: "kkzKneKvxcQdMIpUruTGrzkScjJ2", // UID from Firebase Authentication
             imageUrl: 'https://i.pravatar.cc/300',
             // lastName: 'Doe',
           ),

@@ -10,6 +10,7 @@ import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WalletCreatedScreen extends StatefulWidget {
   const WalletCreatedScreen({super.key, required this.isImport});
@@ -39,19 +40,13 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
           address.text = controller.address!;
         });
       });
-      await FirebaseChatCore.instance.createUserInFirestore(
-        types.User(
-          firstName: address.text,
-          id: address.text, // UID from Firebase Authentication
-          imageUrl: 'https://i.pravatar.cc/300',
+      log(controller.address!);
+      log(controller.password!);
 
-          // lastName: 'Doe',
-        ),
-      );
       await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
-      userController.setUser(User(
+      userController.setUser(WalletUser(
           pfpUrl: "",
           walletAddress: controller.address!,
           accountName: "Account 1",

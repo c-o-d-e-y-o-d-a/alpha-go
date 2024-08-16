@@ -2,9 +2,9 @@ import 'package:alpha_go/models/user_model.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  late User user;
+  late WalletUser user;
 
-  void setUser(User newUser) {
+  void setUser(WalletUser newUser) {
     user = newUser;
   }
 
