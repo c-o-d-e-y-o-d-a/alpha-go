@@ -13,7 +13,7 @@ class UsersPage extends StatelessWidget {
   Widget _buildAvatar(types.User user) {
     final color = Colors.blue;
     final hasImage = user.imageUrl != null;
-    final name = "Name";
+    final name = user.firstName;
 
     return Container(
       margin: const EdgeInsets.only(right: 16),
@@ -23,7 +23,7 @@ class UsersPage extends StatelessWidget {
         radius: 20,
         child: !hasImage
             ? Text(
-                name.isEmpty ? '' : name[0].toUpperCase(),
+                name ?? '',
                 style: const TextStyle(color: Colors.white),
               )
             : null,

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -24,7 +25,6 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
-  final UserController userController = Get.find();
   final SharedPreferences prefs = Get.find();
 
   @override
@@ -46,14 +46,6 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
       await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
-      userController.setUser(WalletUser(
-          pfpUrl: "",
-          walletAddress: controller.address!,
-          accountName: "Account 1",
-          bio: "BIO"));
-      await FirebaseUtils.users
-          .doc(controller.address)
-          .set(userController.toJson());
     });
   }
 
@@ -104,7 +96,8 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => const NavBar());
+                      Get.to(OnboardingScreen());
+                      // Get.to(() => const NavBar());
                     },
                     child: const Text("Continue"),
                   ),

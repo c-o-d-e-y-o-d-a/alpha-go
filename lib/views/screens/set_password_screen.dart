@@ -114,18 +114,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         password: controller.password!,
                       )
                           .then((value) async {
-                        log(FirebaseAuth.instance.currentUser!.uid);
-
-                        // await FirebaseChatCore.instance.createUserInFirestore(
-                        //   types.User(
-                        //     firstName: address.text,
-                        //     id: FirebaseAuth.instance.currentUser!
-                        //         .uid, // UID from Firebase Authentication
-                        //     imageUrl: 'https://i.pravatar.cc/300',
-
-                        //     // lastName: 'Doe',
-                        //   ),
-                        // );
+                        log("User has been Logged in");
                       });
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'weak-password') {
@@ -140,10 +129,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     } catch (e) {
                       log(e.toString());
                     }
-                    Get.to(OnboardingScreen());
-                    // Get.to(() => WalletCreatedScreen(
-                    //       isImport: widget.isImport,
-                    //     ));
+                    //Get.to(OnboardingScreen());
+                    Get.to(() => WalletCreatedScreen(
+                          isImport: widget.isImport,
+                        ));
                   }
                 },
                 child: const Text("Continue"),

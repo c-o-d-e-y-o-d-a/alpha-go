@@ -28,6 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
           IconButton(
               onPressed: () async {
                 await prefs.remove('mnemonic');
+                await prefs.remove('password');
+                FirebaseAuth.instance.signOut();
                 Get.offAll(LoginPage());
               },
               icon: const Icon(Icons.logout))
@@ -55,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 20,
                   ),
                   Text(userController.user.accountName),
-                  Text(FirebaseAuth.instance.currentUser!.email!),
+                  //Text(FirebaseAuth.instance.currentUser!.email!),
                   const SizedBox(
                     height: 20,
                   ),
