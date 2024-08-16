@@ -1,14 +1,11 @@
 import 'dart:developer';
-
-import 'package:alpha_go/controllers/user_controller.dart';
+import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/models/firebase_model.dart';
-import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/widgets/navbar.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WalletCreatedScreen extends StatefulWidget {
   const WalletCreatedScreen({super.key, required this.isImport});
@@ -22,7 +19,6 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
-  final UserController userController = Get.find();
   final SharedPreferences prefs = Get.find();
 
   @override
@@ -38,17 +34,33 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
           address.text = controller.address!;
         });
       });
+
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: "${controller.address!}@alphago.com",
+          password: controller.password!,
+        )
+            .then((value) async {
+          log("User has been Logged in");
+        });
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          log('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          log('The account already exists for that email.');
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: "${controller.address}@alphago.com",
+            password: controller.password!,
+          );
+        }
+      } catch (e) {
+        log("An error has occured ${e.toString()}");
+      }
+
       await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
-      userController.setUser(User(
-          pfpUrl: "",
-          walletAddress: controller.address!,
-          accountName: "Account 1",
-          bio: "BIO"));
-      await FirebaseUtils.users
-          .doc(controller.address)
-          .set(userController.toJson());
     });
   }
 
@@ -99,7 +111,8 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => const NavBar());
+                      Get.off(const OnboardingScreen());
+                      // Get.to(() => const NavBar());
                     },
                     child: const Text("Continue"),
                   ),

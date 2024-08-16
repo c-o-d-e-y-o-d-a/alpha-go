@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/firebase_model.dart';
@@ -5,6 +6,7 @@ import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:alpha_go/views/widgets/navbar.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,19 +54,38 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
+                  final alphanumeric =
+                      RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$');
+                  log(alphanumeric.hasMatch(password.text).toString());
                   if (password.text == confirmPassword.text) {
                     if (widget.isEnter) {
                       if (password.text == controller.password) {
                         await controller.createOrRestoreWallet(
                           Network.Testnet,
                         );
+
                         await FirebaseUtils.users
                             .doc(controller.address)
                             .get()
-                            .then((value) {
+                            .then((value) async {
+                          try {
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                              email: "${controller.address}@alphago.com",
+                              password: controller.password!,
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              log('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              log('Wrong password provided for that user.');
+                            } else {
+                              log(e.toString());
+                            }
+                          }
                           Map<String, dynamic> data =
                               value.data() as Map<String, dynamic>;
-                          userController.setUser(User(
+                          userController.setUser(WalletUser(
                               accountName: data["accountName"]!,
                               walletAddress: data["walletAddress"]!,
                               bio: data["bio"]!,
@@ -77,7 +98,13 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       }
                       return;
                     }
+                    if (!alphanumeric.hasMatch(password.text)) {
+                      Get.snackbar("Weak Password",
+                          "Password must contain at least 1 uppercase letter, 1 number, and be at least 6 characters long");
+                      return;
+                    }
                     controller.password = password.text;
+
                     Get.to(() => WalletCreatedScreen(
                           isImport: widget.isImport,
                         ));

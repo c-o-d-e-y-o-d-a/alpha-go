@@ -1,8 +1,11 @@
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
+import 'package:alpha_go/views/screens/login_screen.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,12 +17,23 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
+  final SharedPreferences prefs = Get.find();
   bool isFetchingBalance = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile Page"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await prefs.remove('mnemonic');
+                await prefs.remove('password');
+                FirebaseAuth.instance.signOut();
+                Get.offAll(const LoginPage());
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -43,6 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 20,
                   ),
                   Text(userController.user.accountName),
+                  //Text(FirebaseAuth.instance.currentUser!.email!),
                   const SizedBox(
                     height: 20,
                   ),

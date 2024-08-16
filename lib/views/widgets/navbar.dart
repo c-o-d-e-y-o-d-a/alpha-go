@@ -1,6 +1,6 @@
 import 'package:alpha_go/views/screens/home_screen.dart';
-import 'package:alpha_go/views/screens/messaging_screen.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
+import 'package:alpha_go/views/screens/rooms.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -14,7 +14,8 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 1;
   static final List<Widget> _widgetOptions = <Widget>[
-    const MessagingScreen(),
+    // const MessagingScreen(),
+    const RoomsPage(),
     const MapHomePage(),
     const ProfilePage(),
   ];
