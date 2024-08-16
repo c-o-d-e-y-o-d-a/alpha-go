@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -9,10 +8,8 @@ import 'package:alpha_go/models/firebase_model.dart';
 import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/widgets/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,27 +21,26 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  bool isUploading = false;
+  TextEditingController name = TextEditingController();
+  TextEditingController bio = TextEditingController();
+  final storageRef = FirebaseStorage.instance.ref();
+  final WalletController controller = Get.find();
+  final UserController userController = Get.find();
+  final ImagePicker picker = ImagePicker();
+  final User user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
-    bool isUploading = false;
-    TextEditingController name = TextEditingController();
-    TextEditingController bio = TextEditingController();
-    final storageRef = FirebaseStorage.instance.ref();
-    final WalletController controller = Get.find();
-    final UserController userController = Get.find();
-    final ImagePicker picker = ImagePicker();
-    final User user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CircleAvatar(
             radius: 70,
-
-            foregroundImage: NetworkImage(user.photoURL ?? ""),
-            // Add logic to display profile picture
+            foregroundImage:
+                !isUploading ? NetworkImage(user.photoURL ?? "") : null,
+            child: isUploading ? const CircularProgressIndicator() : null,
           ),
-          // Button to choose profile picture
           ElevatedButton(
             onPressed: () async {
               setState(() {
@@ -73,20 +69,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Add logic to choose profile picture
             },
-            child: Text('Choose Profile Picture'),
+            child: const Text('Choose Profile Picture'),
           ),
-          //SizedBox(height: 16), // Add some spacing between the buttons
-          // Text field to enter name
           TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Name',
             ),
             controller: name,
           ),
-          // SizedBox(height: 16), // Add some spacing between the buttons
-          // Text field to enter bio
           TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Bio',
             ),
             controller: bio,
@@ -96,10 +88,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 await FirebaseChatCore.instance.createUserInFirestore(
                   types.User(
                     firstName: name.text,
+                    lastName: controller.address,
                     id: user.uid, // UID from Firebase Authentication
                     imageUrl: user.photoURL,
-
-                    // lastName: 'Doe',
                   ),
                 );
                 userController.setUser(WalletUser(
@@ -111,9 +102,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 await FirebaseUtils.users
                     .doc(controller.address)
                     .set(userController.toJson());
-                Get.to(() => const NavBar());
+                Get.off(() => const NavBar());
               },
-              child: Text('Submit')),
+              child: const Text('Submit')),
         ],
       ),
     );

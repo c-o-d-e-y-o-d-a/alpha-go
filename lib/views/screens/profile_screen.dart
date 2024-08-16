@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 await prefs.remove('mnemonic');
                 await prefs.remove('password');
                 FirebaseAuth.instance.signOut();
-                Get.offAll(LoginPage());
+                Get.offAll(const LoginPage());
               },
               icon: const Icon(Icons.logout))
         ],

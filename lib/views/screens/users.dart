@@ -11,7 +11,7 @@ class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
 
   Widget _buildAvatar(types.User user) {
-    final color = Colors.blue;
+    const color = Colors.blue;
     final hasImage = user.imageUrl != null;
     final name = user.firstName;
 
@@ -82,7 +82,12 @@ class UsersPage extends StatelessWidget {
                     child: Row(
                       children: [
                         _buildAvatar(user),
-                        Text("Name"),
+                        Column(
+                          children: [
+                            Text(user.firstName ?? ''),
+                            Text(user.lastName ?? ''),
+                          ],
+                        ),
                       ],
                     ),
                   ),
