@@ -51,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 90,
                     backgroundColor: Colors.grey,
-                    backgroundImage: NetworkImage(userController.user.pfpUrl),
+                    backgroundImage:
+                        NetworkImage(userController.user.pfpUrl ?? ""),
                   ),
                   const SizedBox(
                     height: 20,

@@ -1,5 +1,5 @@
 class WalletUser {
-  final String pfpUrl;
+  String? pfpUrl;
   final String walletAddress;
   final String accountName;
   final String bio;

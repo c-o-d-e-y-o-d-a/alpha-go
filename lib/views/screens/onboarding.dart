@@ -37,8 +37,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           CircleAvatar(
             radius: 70,
-            foregroundImage:
-                !isUploading ? NetworkImage(user.photoURL ?? "") : null,
+            foregroundImage: !isUploading
+                ? NetworkImage(userController.user.pfpUrl ?? "")
+                : null,
             child: isUploading ? const CircularProgressIndicator() : null,
           ),
           ElevatedButton(
@@ -55,16 +56,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 try {
                   await mountainsRef.putFile(file).then((value) async {
                     await mountainsRef.getDownloadURL().then((value) async {
-                      await user.updatePhotoURL(value);
+                      log(value);
+                      await user.updatePhotoURL(value).then((onValue) {
+                        userController.updatePfpUrl(value);
+                        setState(() {
+                          isUploading = false;
+                          log("done");
+                          log(user.photoURL.toString());
+                        });
+                      });
                       setState(() {});
                     });
                   });
                 } on FirebaseException catch (e) {
                   log(e.toString());
                 }
-                setState(() {
-                  isUploading = false;
-                });
               }
 
               // Add logic to choose profile picture
@@ -90,11 +96,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     firstName: name.text,
                     lastName: controller.address,
                     id: user.uid, // UID from Firebase Authentication
-                    imageUrl: user.photoURL,
+                    imageUrl: userController.user.pfpUrl ?? "",
                   ),
                 );
                 userController.setUser(WalletUser(
-                  pfpUrl: user.photoURL ?? "",
+                  pfpUrl: userController.user.pfpUrl ?? "",
                   walletAddress: controller.address!,
                   accountName: name.text,
                   bio: bio.text,
