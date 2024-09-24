@@ -30,6 +30,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final ImagePicker picker = ImagePicker();
   final User user = FirebaseAuth.instance.currentUser!;
   @override
+  void initState() {
+    super.initState();
+    log(controller.address.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(

@@ -111,7 +111,10 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Get.off(const OnboardingScreen());
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        Get.off(const OnboardingScreen());
+                      }
+
                       // Get.to(() => const NavBar());
                     },
                     child: const Text("Continue"),

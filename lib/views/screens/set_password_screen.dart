@@ -114,12 +114,13 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       Get.snackbar("Weak Password",
                           "Password must contain at least 1 uppercase letter, 1 number, and be at least 6 characters long");
                       return;
-                    }
-                    controller.password = password.text;
+                    } else {
+                      controller.password = password.text;
 
-                    Get.to(() => WalletCreatedScreen(
-                          isImport: widget.isImport,
-                        ));
+                      Get.to(() => WalletCreatedScreen(
+                            isImport: widget.isImport,
+                          ));
+                    }
                   }
                 },
                 child: const Text("Continue"),

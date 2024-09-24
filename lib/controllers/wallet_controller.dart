@@ -19,12 +19,18 @@ class WalletController extends GetxController {
 
   Future<Blockchain> blockchainInit() async {
     blockchain = await Blockchain.create(
-        config: const BlockchainConfig.esplora(
-            config: EsploraConfig(
-      baseUrl: "https://blockstream.info/testnet/api",
-      stopGap: 5,
-      concurrency: 2,
-    )));
+        //     config: const BlockchainConfig.esplora(
+        //         config: EsploraConfig(
+        //   baseUrl: "https://blockstream.info/testnet/api",
+        //   stopGap: 5,
+        //   concurrency: 1,
+        // ))
+        config: const BlockchainConfig.electrum(
+            config: ElectrumConfig(
+                url: 'ssl://electrum.blockstream.info:60002',
+                retry: 2,
+                stopGap: 5,
+                validateDomain: true)));
     return blockchain;
   }
 
