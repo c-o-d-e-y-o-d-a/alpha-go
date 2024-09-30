@@ -12,8 +12,7 @@
     <application
         android:label="Alpha Go"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-          android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"

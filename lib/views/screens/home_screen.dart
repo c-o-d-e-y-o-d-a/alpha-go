@@ -19,7 +19,7 @@ class _MapHomePageState extends State<MapHomePage> {
   LatLng? userPos;
   Image? pointerImage;
   mb.MapboxMap? mapboxMap;
-  final styleUrl = "mapbox://styles/powerclubglobal/cm1nf52ui00lv01qr62qw8ute";
+  final styleUrl = "mapbox://styles/powerclubglobal/cm1nfq4wg00ks01ph0et19mag";
 
   final apiKey =
       "pk.eyJ1IjoicG93ZXJjbHViZ2xvYmFsIiwiYSI6ImNtMW1mNm52aTBmOGgybG9ranJ5bHEwOW4ifQ.kZ-f73h8hk0CXzjy08OSyg";
@@ -108,7 +108,7 @@ class _MapHomePageState extends State<MapHomePage> {
                 cameraOptions: mb.CameraOptions(
                     center: mb.Point(
                         coordinates:
-                            mb.Position(userPos!.latitude, userPos!.longitude)),
+                            mb.Position(userPos!.longitude, userPos!.latitude)),
                     zoom: 12.0),
               ),
         floatingActionButton: FloatingActionButton(
@@ -118,7 +118,7 @@ class _MapHomePageState extends State<MapHomePage> {
                 mapboxMap?.setCamera(mb.CameraOptions(
                     center: mb.Point(
                         coordinates:
-                            mb.Position(value.latitude, value.longitude)),
+                            mb.Position(value.longitude, value.latitude)),
                     zoom: 12.0));
               });
             });
