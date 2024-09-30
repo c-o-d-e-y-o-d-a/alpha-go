@@ -27,7 +27,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller
           .createOrRestoreWallet(
-        Network.Testnet,
+        Network.testnet,
       )
           .then((value) {
         setState(() {

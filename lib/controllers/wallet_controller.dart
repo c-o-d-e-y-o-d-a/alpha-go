@@ -13,7 +13,7 @@ class WalletController extends GetxController {
   int? balance;
 
   Future<void> generateMnemonicHandler() async {
-    var res = await Mnemonic.create(WordCount.Words12);
+    var res = await Mnemonic.create(WordCount.words12);
     mnemonic = res.toString();
   }
 
@@ -25,11 +25,11 @@ class WalletController extends GetxController {
         //   stopGap: 5,
         //   concurrency: 1,
         // ))
-        config: const BlockchainConfig.electrum(
+        config: BlockchainConfig.electrum(
             config: ElectrumConfig(
                 url: 'ssl://electrum.blockstream.info:60002',
                 retry: 2,
-                stopGap: 5,
+                stopGap: BigInt.from(5),
                 validateDomain: true)));
     return blockchain;
   }
@@ -37,15 +37,15 @@ class WalletController extends GetxController {
   Future<List<Descriptor>> getDescriptors(String mnemonic) async {
     final descriptors = <Descriptor>[];
     try {
-      for (var e in [KeychainKind.External, KeychainKind.Internal]) {
+      for (var e in [KeychainKind.externalChain, KeychainKind.internalChain]) {
         final mnemonicObj = await Mnemonic.fromString(mnemonic);
         final descriptorSecretKey = await DescriptorSecretKey.create(
-          network: Network.Testnet,
+          network: Network.testnet,
           mnemonic: mnemonicObj,
         );
         final descriptor = await Descriptor.newBip84(
           secretKey: descriptorSecretKey,
-          network: Network.Testnet,
+          network: Network.testnet,
           keychain: e,
         );
         descriptors.add(descriptor);
@@ -77,20 +77,20 @@ class WalletController extends GetxController {
   }
 
   Future<void> getAddress() async {
-    final addressInfo =
-        await genWallet!.wallet.getAddress(addressIndex: const AddressIndex());
-    address = addressInfo.address;
+    final addressInfo = genWallet!.wallet
+        .getAddress(addressIndex: const AddressIndex.increase());
+    address = addressInfo.address.toString();
   }
 
   Future<void> getBalance() async {
     syncWallet();
-    final balanceObj = await genWallet!.wallet.getBalance();
+    final balanceObj = genWallet!.wallet.getBalance();
     final res = "Total Balance: ${balanceObj.total.toString()}";
     log(res);
-    balance = balanceObj.total;
+    balance = balanceObj.total.toInt();
   }
 
   Future<void> syncWallet() async {
-    genWallet!.wallet.sync(blockchain);
+    genWallet!.wallet.sync(blockchain: blockchain);
   }
 }

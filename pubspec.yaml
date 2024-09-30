@@ -35,19 +35,16 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 
-  bdk_flutter: 
-  introduction_screen:
+  bdk_flutter:
+    git:
+      url: https://github.com/M4dhav/bdk-flutter.git
   rolling_switch: 
-  flutter_map: 
-  flutter_map_location_marker:
-  flutter_map_marker_cluster:
   latlong2:
-  geolocator:
   image: 
   flutter_cache_manager: 
-  cached_custom_marker: 
   url_launcher: 
-  google_nav_bar: 
+  google_nav_bar:
+  geolocator:
   searchfield:
   get:
   buttons_tabbar:
@@ -59,11 +56,12 @@ dependencies:
   flutter_firebase_chat_core: 
   flutter_chat_ui: 
   firebase_auth: 
-  image_picker: 
-
+  image_picker: ^1.1.2
+  mapbox_maps_flutter: 
   flutter_chat_types: any
   http: any
   path_provider: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
