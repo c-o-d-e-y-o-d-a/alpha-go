@@ -83,7 +83,7 @@ class WalletController extends GetxController {
   }
 
   Future<void> getBalance() async {
-    syncWallet();
+    await syncWallet();
     final balanceObj = genWallet!.wallet.getBalance();
     final res = "Total Balance: ${balanceObj.total.toString()}";
     log(res);

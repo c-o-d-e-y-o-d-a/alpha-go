@@ -30,6 +30,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.0"
+  animated_toggle_switch:
+    dependency: "direct main"
+    description:
+      name: animated_toggle_switch
+      sha256: "786e82be3b004100299c1c6d023f8f1928decc8353a6fdff191bf78c866262fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.3"
   archive:
     dependency: transitive
     description:
@@ -926,14 +934,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  rolling_switch:
+  responsive_sizer:
     dependency: "direct main"
     description:
-      name: rolling_switch
-      sha256: "28e6434d05ee135362847e6cb37f2861d724e52ad400914f8a4ef3e4935cb8dd"
+      name: responsive_sizer
+      sha256: "6aefee6065c0883681bc7559147a24d8fa1846d296a216abcda25ff349340712"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "3.3.1"
   rxdart:
     dependency: transitive
     description:
@@ -954,10 +962,10 @@ packages:
     dependency: "direct main"
     description:
       name: searchfield
-      sha256: "6ae29d79f9aa648f59a50ed8616704e6a2118b228fda5ad3af3520d8208b41d4"
+      sha256: "837721576ca1de1ce40c9841760e40cd7452d3068ea2a22a7b25d06133a7d989"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.6"
+    version: "1.1.7"
   shared_preferences:
     dependency: "direct main"
     description:
