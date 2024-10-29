@@ -7,6 +7,7 @@ import 'package:alpha_go/views/screens/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,15 +37,78 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Alpha Go',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: initWidget,
-      // home: MapHomePage(),
-    );
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      return GetMaterialApp(
+        title: 'Alpha Go',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          textTheme: TextTheme(
+            displayLarge: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 57,
+                fontWeight: FontWeight.bold),
+            displayMedium: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 45,
+                fontWeight: FontWeight.bold),
+            displaySmall: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 36,
+                fontWeight: FontWeight.bold),
+            headlineLarge: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 32,
+                fontWeight: FontWeight.bold),
+            headlineMedium: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 28,
+                fontWeight: FontWeight.bold),
+            headlineSmall: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
+            titleLarge: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 22,
+                fontWeight: FontWeight.w900),
+            titleMedium: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 16,
+                fontWeight: FontWeight.w900),
+            titleSmall: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+            bodyLarge: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 16,
+                fontWeight: FontWeight.w400),
+            bodyMedium: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Cinzel',
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600),
+            bodySmall: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 12,
+                fontWeight: FontWeight.w400),
+            labelLarge: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+            labelMedium: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 12,
+                fontWeight: FontWeight.w400),
+            labelSmall: const TextStyle(
+                fontFamily: 'Cinzel',
+                fontSize: 11,
+                fontWeight: FontWeight.w400),
+          ),
+        ),
+        home: initWidget,
+      );
+    });
   }
 }

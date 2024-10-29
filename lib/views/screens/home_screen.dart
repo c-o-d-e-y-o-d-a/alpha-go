@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image/image.dart' as img;
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mb;
+import 'package:searchfield/searchfield.dart';
 
 class MapHomePage extends StatefulWidget {
   const MapHomePage({super.key});
@@ -19,14 +19,20 @@ class MapHomePage extends StatefulWidget {
 class _MapHomePageState extends State<MapHomePage> {
   LatLng? userPos;
   Image? pointerImage;
+  mb.MapboxMap? mapboxMap;
+  final styleUrl = "mapbox://styles/powerclubglobal/cm1nfq4wg00ks01ph0et19mag";
+  static final List<String> countries = ['India', 'China', 'Russia'];
+
+  final apiKey =
+      "pk.eyJ1IjoicG93ZXJjbHViZ2xvYmFsIiwiYSI6ImNtMW1mNm52aTBmOGgybG9ranJ5bHEwOW4ifQ.kZ-f73h8hk0CXzjy08OSyg";
+
   Future<Image> downloadImage(String imageUrl) async {
     final File imageFile = await DefaultCacheManager().getSingleFile(imageUrl);
     final img.Image originalImage =
         img.decodeImage(imageFile.readAsBytesSync())!;
     return Image.memory(
       Uint8List.fromList(img.encodePng(originalImage)),
-      height: 50,
-      width: 50,
+      fit: BoxFit.cover,
     );
   }
 
@@ -61,14 +67,23 @@ class _MapHomePageState extends State<MapHomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      downloadImage(
-              "https://btcinc.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0bb6c9f7-9fea-4e75-9a10-2132b25e6c26%2FB24_glyph_vinyl_black.png?table=block&id=51a413cd-839a-4dfc-98fc-d6ad3c6beff8&spaceId=01e1e793-4fae-46aa-9554-5c27f1b12ad6&width=860&userId=&cache=v2")
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      mb.MapboxOptions.setAccessToken(apiKey);
+
+      downloadImage(FirebaseAuth.instance.currentUser!.photoURL ??
+              "https://via.placeholder.com/150")
           .then((value) {
         setState(() {
           pointerImage = value;
         });
       });
+      mapboxMap?.location.updateSettings(mb.LocationComponentSettings(
+          locationPuck: mb.LocationPuck(
+              locationPuck3D: mb.LocationPuck3D(
+        modelUri:
+            "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+      ))));
+      // mapboxMap?.style.addLayer(mb.ModelLayer(id: id, sourceId: sourceId))
       determinePosition().then((value) {
         setState(() {
           userPos = LatLng(value.latitude, value.longitude);
@@ -77,80 +92,59 @@ class _MapHomePageState extends State<MapHomePage> {
     });
   }
 
-  final styleUrl =
-      "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
-  final apiKey = "e7ff0aa5-a374-4a61-95d7-7323683d4cfd";
+  _onMapCreated(mb.MapboxMap mapboxMap) {
+    this.mapboxMap = mapboxMap;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          leading: Image.asset(
+            'assets/alpha.jpg',
+            fit: BoxFit.contain,
+          ),
+          automaticallyImplyLeading: false,
+          title: SearchField<String>(
+            suggestions: countries
+                .map(
+                  (e) => SearchFieldListItem<String>(e,
+                      item: e,
+                      // Use child to show Custom Widgets in the suggestions
+                      // defaults to Text widget
+                      child: Text(e)),
+                )
+                .toList(),
+          ),
+          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
+        ),
         body: userPos == null
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : FlutterMap(
-                options: MapOptions(
-                    initialCenter: userPos!,
-                    // center: LatLng(59.438484, 24.742595),
-                    initialZoom: 14,
-                    keepAlive: true),
-                children: [
-                  TileLayer(
-                    urlTemplate: "$styleUrl?api_key={api_key}",
-                    additionalOptions: {"api_key": apiKey},
-                    maxZoom: 20,
-                    maxNativeZoom: 20,
-                  ),
-                  CurrentLocationLayer(
-                      alignPositionOnUpdate: AlignOnUpdate.always,
-                      alignDirectionOnUpdate: AlignOnUpdate.always,
-                      style: LocationMarkerStyle(
-                        marker: DefaultLocationMarker(
-                          child: pointerImage,
-                        ),
-                        markerSize: const Size(30, 30),
-                        markerDirection: MarkerDirection.heading,
-                      )),
-                  MarkerClusterLayerWidget(
-                    options: MarkerClusterLayerOptions(
-                      maxClusterRadius: 45,
-                      size: const Size(40, 40),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(50),
-                      maxZoom: 15,
-                      markers: [
-                        Marker(
-                          point: const LatLng(
-                              30.65426548694503, 76.85826072220257),
-                          child: pointerImage!,
-                        ),
-                        Marker(
-                          point: const LatLng(
-                              36.15720618462996, -86.77819820373395),
-                          child: pointerImage!,
-                        ),
-                      ],
-                      builder: (context, markers) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.blue),
-                          child: Center(
-                            child: Text(
-                              markers.length.toString(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+            : mb.MapWidget(
+                key: const ValueKey("mapWidget"),
+                onMapCreated: _onMapCreated,
+                styleUri: styleUrl,
+                cameraOptions: mb.CameraOptions(
+                    pitch: 90,
+                    center: mb.Point(
+                        coordinates:
+                            mb.Position(userPos!.longitude, userPos!.latitude)),
+                    zoom: 12.0),
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             determinePosition().then((value) {
-              setState(() {
-                userPos = LatLng(value.latitude, value.longitude);
+              setState(() async {
+                await mapboxMap?.flyTo(
+                    mb.CameraOptions(
+                        pitch: 90,
+                        center: mb.Point(
+                            coordinates:
+                                mb.Position(value.longitude, value.latitude)),
+                        zoom: 12.0),
+                    mb.MapAnimationOptions());
               });
             });
           },

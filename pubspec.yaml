@@ -35,20 +35,17 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 
-  bdk_flutter: 
-  introduction_screen:
-  rolling_switch: 
-  flutter_map: 
-  flutter_map_location_marker:
-  flutter_map_marker_cluster:
+  bdk_flutter:
+    git:
+      url: https://github.com/M4dhav/bdk-flutter.git 
   latlong2:
-  geolocator:
   image: 
   flutter_cache_manager: 
-  cached_custom_marker: 
+  animated_toggle_switch: ^0.8.3
   url_launcher: 
-  google_nav_bar: 
-  searchfield:
+  google_nav_bar:
+  geolocator:
+  searchfield: ^1.1.7
   get:
   buttons_tabbar:
   shared_preferences: 
@@ -59,11 +56,13 @@ dependencies:
   flutter_firebase_chat_core: 
   flutter_chat_ui: 
   firebase_auth: 
-  image_picker: 
-
+  image_picker: ^1.1.2
+  responsive_sizer: ^3.3.1
+  mapbox_maps_flutter: 
   flutter_chat_types: any
   http: any
   path_provider: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -101,12 +100,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Cinzel
+      fonts:
+        - asset: assets/cinzel.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/screens/login_screen.dart';
@@ -102,7 +104,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             setState(() {
                               isFetchingBalance = true;
                             });
-                            await controller.getBalance().then((value) {
+                            await Isolate.run(controller.getBalance)
+                                .then((value) {
                               setState(() {
                                 isFetchingBalance = false;
                               });
@@ -158,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: DefaultTabController(
-                    length: 2,
+                    length: 3,
                     child: Column(
                       children: <Widget>[
                         ButtonsTabBar(
@@ -177,16 +180,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           tabs: const [
                             Tab(
-                              text: "INSCRIPTIONS",
+                              text: "TIMELINE",
+                            ),
+                            Tab(
+                              text: "TOKENS",
                             ),
                             Tab(
                               text: "NFTS",
-                            ),
+                            )
                           ],
                         ),
                         const Expanded(
                           child: TabBarView(
-                            children: <Widget>[Text("Tab1"), Text("Tab2")],
+                            children: <Widget>[
+                              Text("Tab1"),
+                              Text("Tab2"),
+                              Text('Tab3')
+                            ],
                             // Add your views here
                           ),
                         ),
