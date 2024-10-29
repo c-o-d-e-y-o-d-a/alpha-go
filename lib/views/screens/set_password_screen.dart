@@ -140,7 +140,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                                 pfpUrl: data["pfpUrl"]!));
                           });
 
-                          Get.to(() => const NavBar());
+                          Get.off(() => const NavBar());
                         } else {
                           Get.snackbar("Error",
                               "Password does not match, please use the password you set before",
@@ -156,7 +156,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         } else {
                           controller.password = password.text;
 
-                          Get.to(() => WalletCreatedScreen(
+                          Get.off(() => WalletCreatedScreen(
                                 isImport: widget.isImport,
                               ));
                         }

@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mb;
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:searchfield/searchfield.dart';
 
 class MapHomePage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MapHomePageState extends State<MapHomePage> {
   LatLng? userPos;
   Image? pointerImage;
   mb.MapboxMap? mapboxMap;
-  final styleUrl = "mapbox://styles/powerclubglobal/cm1nfq4wg00ks01ph0et19mag";
+  final styleUrl = "mapbox://styles/powerclubglobal/cm2tx1qrp00fy01qw4oga0dqk";
   static final List<String> countries = ['India', 'China', 'Russia'];
 
   final apiKey =
@@ -98,14 +99,37 @@ class _MapHomePageState extends State<MapHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: Image.asset(
-            'assets/alpha.jpg',
-            fit: BoxFit.contain,
+          shape: RoundedRectangleBorder(
+              side: const BorderSide(color: Color(0xffb4914b)),
+              borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(20.sp))),
+          leadingWidth: 17.w,
+          leading: Padding(
+            padding: EdgeInsets.only(left: 3.w),
+            child: Image.asset(
+              'assets/alpha.jpg',
+              fit: BoxFit.contain,
+            ),
           ),
+          backgroundColor: Colors.black,
+          //bottom: Constants.appBarBottom,
           automaticallyImplyLeading: false,
           title: SearchField<String>(
+            searchInputDecoration: SearchInputDecoration(
+                hintText: 'Search',
+                cursorColor: Colors.white,
+                hintStyle: const TextStyle(
+                  color: Color(0xffb4914b),
+                )),
+            marginColor: const Color(0xffb4914b),
             suggestions: countries
                 .map(
                   (e) => SearchFieldListItem<String>(e,
@@ -116,7 +140,23 @@ class _MapHomePageState extends State<MapHomePage> {
                 )
                 .toList(),
           ),
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(
+                right: 3.w,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.menu,
+                      color: const Color(0xffb4914b),
+                      size: 29.sp,
+                    )),
+              ),
+            )
+          ],
         ),
         body: userPos == null
             ? const Center(
@@ -149,6 +189,9 @@ class _MapHomePageState extends State<MapHomePage> {
             });
           },
           child: const Icon(Icons.my_location),
-        ));
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+      ),
+    );
   }
 }
