@@ -26,7 +26,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isUploading = false;
   TextEditingController name = TextEditingController();
   TextEditingController bio = TextEditingController();
-  final storageRef = FirebaseStorage.instance.ref();
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final ImagePicker picker = ImagePicker();
@@ -76,8 +75,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       setState(() {
                         isUploading = true;
                       });
-                      final mountainsRef =
-                          storageRef.child('${controller.address}.jpg');
+                      final mountainsRef = FirebaseUtils.userPfp
+                          .child('${controller.address}.jpg');
                       final XFile? image =
                           await picker.pickImage(source: ImageSource.gallery);
                       if (image != null) {

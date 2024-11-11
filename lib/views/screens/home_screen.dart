@@ -2,9 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:alpha_go/controllers/event_controller.dart';
+import 'package:alpha_go/models/event_model.dart';
+import 'package:alpha_go/views/widgets/event_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image/image.dart' as img;
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:latlong2/latlong.dart' as ltlng;
@@ -25,6 +30,7 @@ class _MapHomePageState extends State<MapHomePage> {
   ltlng.LatLng? userPos;
   Image? pointerImage;
   mb.MapboxMap? mapboxMap;
+  final EventController eventController = Get.find();
   final styleUrl = "mapbox://styles/powerclubglobal/cm2tx1qrp00fy01qw4oga0dqk";
   static final List<String> countries = ['India', 'China', 'Russia'];
 
@@ -99,25 +105,30 @@ class _MapHomePageState extends State<MapHomePage> {
     });
   }
 
-  addModelLayer() async {
-    var value = mb.Point(coordinates: mb.Position(77.584302, 28.452141));
+  addModelLayer(EventModel event) async {
+    mb.Point location = mb.Point(
+        coordinates:
+            mb.Position(event.location.longitude, event.location.latitude));
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");
     }
 
-    await mapboxMap?.style
-        .addSource(mb.GeoJsonSource(id: "sourceId", data: json.encode(value)));
+    await mapboxMap?.style.addSource(mb.GeoJsonSource(
+        id: "location-${event.eventName.split(' ')[0]}",
+        data: json.encode(location)));
 
-    final carModelId = "model-car-id";
-    final carModelUri =
+    final eventModelId = "event-${event.eventName.split(' ')[0]}";
+    final eventModelUri =
         "https://github.com/M4dhav/alpha-go/raw/dev/assets/bitcoin/scene.gltf";
-    await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
+    await mapboxMap?.style.addStyleModel(eventModelId, eventModelUri);
 
-    var modelLayer1 = ModelLayer(id: "modelLayer-car", sourceId: "sourceId");
-    modelLayer1.modelId = carModelId;
-    modelLayer1.modelScale = [3, 3, 3];
-    modelLayer1.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer1);
+    var modelLayer = ModelLayer(
+        id: "modelLayer-${event.eventName.split(' ')[0]}",
+        sourceId: "location-${event.eventName.split(' ')[0]}");
+    modelLayer.modelId = eventModelId;
+    modelLayer.modelScale = [3, 3, 3];
+    modelLayer.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(modelLayer);
   }
 
   _onMapCreated(mb.MapboxMap mapboxMap) {
@@ -136,8 +147,21 @@ class _MapHomePageState extends State<MapHomePage> {
     log('puck added');
   }
 
+  _onTapListener(mb.MapContentGestureContext context) {
+    EventModel tappedEvent = eventController.events.firstWhere((element) =>
+        element.location.latitude.toStringAsPrecision(5) ==
+            context.point.coordinates.lat.toStringAsPrecision(5) &&
+        element.location.longitude.toStringAsPrecision(5) ==
+            context.point.coordinates.lng.toStringAsPrecision(5));
+    Get.dialog(EventWidget(event: tappedEvent));
+
+    log('tapped${tappedEvent.eventName}');
+  }
+
   _onStyleLoaded(StyleLoadedEventData data) async {
-    await addModelLayer();
+    for (EventModel event in eventController.events) {
+      await addModelLayer(event);
+    }
     log('style loaded');
   }
 
@@ -212,6 +236,7 @@ class _MapHomePageState extends State<MapHomePage> {
                 key: const ValueKey("mapWidget"),
                 onMapCreated: _onMapCreated,
                 onStyleLoadedListener: _onStyleLoaded,
+                onTapListener: _onTapListener,
                 styleUri: styleUrl,
                 cameraOptions: mb.CameraOptions(
                     pitch: 80,
