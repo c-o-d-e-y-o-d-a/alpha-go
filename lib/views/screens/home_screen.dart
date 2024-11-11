@@ -93,17 +93,14 @@ class _MapHomePageState extends State<MapHomePage> {
       determinePosition().then((value) {
         setState(() {
           userPos = ltlng.LatLng(value.latitude, value.longitude);
+          log('userPos: $userPos');
         });
       });
-      //mapboxMap?.style.addLayer(mb.LocationIndicatorLayer(id: 'location-main'));
-
-      // mapboxMap?.style.addLayer(mb.ModelLayer(id: id, sourceId: sourceId))
     });
   }
 
   addModelLayer() async {
-    var value = mb.Point(
-        coordinates: mb.Position(76.85278280979402, 30.659204869650807));
+    var value = mb.Point(coordinates: mb.Position(77.584302, 28.452141));
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");
     }
@@ -113,13 +110,12 @@ class _MapHomePageState extends State<MapHomePage> {
 
     final carModelId = "model-car-id";
     final carModelUri =
-        "https://github.com/M4dhav/alpha-go/raw/dev/assets/rossiya_hotel/scene.gltf";
+        "https://github.com/M4dhav/alpha-go/raw/dev/assets/bitcoin/scene.gltf";
     await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
 
     var modelLayer1 = ModelLayer(id: "modelLayer-car", sourceId: "sourceId");
     modelLayer1.modelId = carModelId;
-    modelLayer1.modelScale = [5, 5, 5];
-    modelLayer1.modelRotation = [0, 0, 90];
+    modelLayer1.modelScale = [3, 3, 3];
     modelLayer1.modelType = ModelType.COMMON_3D;
     mapboxMap?.style.addLayer(modelLayer1);
   }
@@ -130,13 +126,11 @@ class _MapHomePageState extends State<MapHomePage> {
         enabled: true,
         puckBearing: mb.PuckBearing.HEADING,
         puckBearingEnabled: true,
-        pulsingEnabled: true,
-        pulsingMaxRadius: 20,
         locationPuck: mb.LocationPuck(
             locationPuck3D: mb.LocationPuck3D(
           modelUri:
-              "https://github.com/M4dhav/alpha-go/raw/dev/assets/man/scene.gltf",
-          modelScale: [70, 70, 70],
+              "https://github.com/M4dhav/alpha-go/raw/dev/assets/pointer.glb",
+          modelScale: [2, 2, 2],
           position: [userPos!.longitude, userPos!.latitude],
         ))));
     log('puck added');
@@ -213,6 +207,8 @@ class _MapHomePageState extends State<MapHomePage> {
                 child: CircularProgressIndicator(),
               )
             : mb.MapWidget(
+                // mapOptions: mb.MapOptions(
+                //     pixelRatio: 1.0, orientation: mb.NorthOrientation.UPWARDS),
                 key: const ValueKey("mapWidget"),
                 onMapCreated: _onMapCreated,
                 onStyleLoadedListener: _onStyleLoaded,
@@ -220,9 +216,9 @@ class _MapHomePageState extends State<MapHomePage> {
                 cameraOptions: mb.CameraOptions(
                     pitch: 80,
                     center: mb.Point(
-                        coordinates:
-                            mb.Position(userPos!.longitude, userPos!.latitude)),
-                    zoom: 12.0),
+                        coordinates: mb.Position(
+                            userPos!.longitude, userPos!.latitude + 0.0016)),
+                    zoom: 18.0),
               ),
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () {
