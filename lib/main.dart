@@ -1,3 +1,4 @@
+import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,8 @@ void main() async {
       Get.put(await SharedPreferences.getInstance());
   final WalletController controller = Get.put(WalletController());
   Get.put(UserController());
+  final EventController eventController = Get.put(EventController());
+  await eventController.getEvents();
   if (prefs.containsKey("mnemonic") && prefs.getString("mnemonic") != null) {
     controller.mnemonic = prefs.getString("mnemonic")!;
     controller.password = prefs.getString("password")!;

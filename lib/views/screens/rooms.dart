@@ -1,3 +1,4 @@
+import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/chat.dart';
 import 'package:alpha_go/views/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 // import 'chat.dart';
 // import 'login.dart';
@@ -69,11 +71,11 @@ class _RoomsPageState extends State<RoomsPage> {
     final name = room.name ?? '';
 
     return Container(
-      margin: const EdgeInsets.only(right: 16),
+      margin: EdgeInsets.only(right: 2.w),
       child: CircleAvatar(
         backgroundColor: hasImage ? Colors.transparent : color,
         backgroundImage: hasImage ? NetworkImage(room.imageUrl!) : null,
-        radius: 20,
+        radius: 20.sp,
         child: !hasImage
             ? Text(
                 name.isEmpty ? '' : name[0].toUpperCase(),
@@ -94,71 +96,129 @@ class _RoomsPageState extends State<RoomsPage> {
       return Container();
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _user == null
-                ? null
-                : () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (context) => const UsersPage(),
-                      ),
-                    );
-                  },
-          ),
-        ],
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Rooms'),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/bg.jpg'),
+          fit: BoxFit.cover,
+        ),
       ),
-      body: StreamBuilder<List<types.Room>>(
-        stream: FirebaseChatCore.instance.rooms(),
-        initialData: const [],
-        builder: (context, snapshot) {
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
-              child: const Text('No rooms'),
-            );
-          }
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          foregroundColor: const Color(0xffb4914b),
+          bottom: Constants.appBarBottom,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: _user == null
+                  ? null
+                  : () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) => const UsersPage(),
+                        ),
+                      );
+                    },
+            ),
+          ],
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          title: const Text('Rooms'),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+            top: 1.h,
+            left: 2.w,
+            right: 2.w,
+            bottom: 1.h,
+          ),
+          child: StreamBuilder<List<types.Room>>(
+            stream: FirebaseChatCore.instance.rooms(),
+            initialData: const [],
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(
+                    top: 1.h,
+                    left: 2.w,
+                    right: 2.w,
+                    bottom: 1.h,
+                  ),
+                  child: const Text('No rooms'),
+                );
+              }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final room = snapshot.data![index];
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final room = snapshot.data![index];
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                        room: room,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ChatPage(
+                            room: room,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 0.5.h),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(20.sp),
+                          border: Border.all(
+                            width: 0.7,
+                            color: const Color(0xffb4914b),
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 2.h,
+                          vertical: 2.h,
+                        ),
+                        child: Row(
+                          children: [
+                            _buildAvatar(room),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  room.users[0].firstName ?? '',
+                                  style: TextStyle(fontSize: 17.sp),
+                                ),
+                                Text(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                          room.updatedAt!)
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: const Color.fromARGB(
+                                          255, 78, 78, 78)),
+                                )
+                              ],
+                            ),
+                            const Spacer(),
+                            IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: Color.fromARGB(255, 78, 78, 78),
+                                ))
+                          ],
+                        ),
                       ),
                     ),
                   );
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      _buildAvatar(room),
-                      Text(room.name ?? ''),
-                    ],
-                  ),
-                ),
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

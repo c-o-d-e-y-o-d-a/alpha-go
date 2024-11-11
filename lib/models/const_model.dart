@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:searchfield/searchfield.dart';
 
 final class Constants {
   static final ButtonStyle buttonStyle = ButtonStyle(
@@ -32,13 +33,16 @@ final class Constants {
     filled: true,
     fillColor: Colors.black.withOpacity(0.7),
   );
+  static final SearchInputDecoration searchInputDecoration =
+      SearchInputDecoration();
   static final appBarBottom = PreferredSize(
-      preferredSize: Size.fromHeight(1.h),
+      preferredSize: Size.fromHeight(2.h),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xffb4914b),
+        decoration: BoxDecoration(
+          color: const Color(0xffb4914b),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.sp)),
         ),
-        height: 0.2.h,
+        height: 0.25.h,
       ));
   static const inputStyle =
       TextStyle(color: Colors.white, fontFamily: 'Roboto');
