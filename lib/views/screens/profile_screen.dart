@@ -1,4 +1,3 @@
-
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -21,6 +21,39 @@ class _ProfilePageState extends State<ProfilePage> {
   final UserController userController = Get.find();
   final SharedPreferences prefs = Get.find();
   bool isFetchingBalance = false;
+  Uint8List? _imageData;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.fetchTransanctions();
+      await _fetchImage();
+    });
+  }
+
+  Future<void> _fetchImage() async {
+    final url = Uri.parse(
+        'https://api.hiro.so/ordinals/v1/inscriptions/c5ef6f0eb0b0215a73aba5cae3ed35a005b106ce141f60c186f749545c722e34i0/content');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          _imageData = response.bodyBytes; // Get binary image data
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load image');
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Error fetching image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -171,7 +204,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                   child: isFetchingBalance
                                       ? const Center(
-                                          child: CircularProgressIndicator())
+                                          child: CircularProgressIndicator(
+                                          color: Color(0xffb4914b),
+                                        ))
                                       : controller.balance == null
                                           ? Column(
                                               mainAxisAlignment:
@@ -184,7 +219,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 Text(
                                                   "BALANCE",
                                                   style: TextStyle(
-                                                    color: const Color(0xffb4914b),
+                                                    color:
+                                                        const Color(0xffb4914b),
                                                     fontSize: 15.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -302,11 +338,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                             ],
                           ),
-                          const Expanded(
+                          Expanded(
                             child: TabBarView(
                               children: <Widget>[
                                 Text("Tab1"),
-                                Text("Tab2"),
+                                _isLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : Image.memory(_imageData!),
                                 Text('Tab3')
                               ],
                             ),

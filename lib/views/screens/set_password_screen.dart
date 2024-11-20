@@ -109,7 +109,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       if (widget.isEnter) {
                         if (password.text == controller.password) {
                           await controller.createOrRestoreWallet(
-                            Network.testnet,
+                            Network.bitcoin,
                           );
 
                           await FirebaseUtils.users

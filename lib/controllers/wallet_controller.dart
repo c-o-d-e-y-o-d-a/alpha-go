@@ -19,18 +19,18 @@ class WalletController extends GetxController {
 
   Future<Blockchain> blockchainInit() async {
     blockchain = await Blockchain.create(
-        //     config: const BlockchainConfig.esplora(
-        //         config: EsploraConfig(
-        //   baseUrl: "https://blockstream.info/testnet/api",
-        //   stopGap: 5,
-        //   concurrency: 1,
-        // ))
-        config: BlockchainConfig.electrum(
-            config: ElectrumConfig(
-                url: 'ssl://electrum.blockstream.info:60002',
-                retry: 2,
-                stopGap: BigInt.from(5),
-                validateDomain: true)));
+        config: BlockchainConfig.esplora(
+            config: EsploraConfig(
+      baseUrl: "https://blockstream.info/api/",
+      stopGap: BigInt.from(5),
+      concurrency: 1,
+    )));
+    // config: BlockchainConfig.electrum(
+    //     config: ElectrumConfig(
+    //         url: 'ssl://electrum.blockstream.info:60002',
+    //         retry: 2,
+    //         stopGap: BigInt.from(5),
+    //         validateDomain: true)));
     return blockchain;
   }
 
@@ -40,12 +40,12 @@ class WalletController extends GetxController {
       for (var e in [KeychainKind.externalChain, KeychainKind.internalChain]) {
         final mnemonicObj = await Mnemonic.fromString(mnemonic);
         final descriptorSecretKey = await DescriptorSecretKey.create(
-          network: Network.testnet,
+          network: Network.bitcoin,
           mnemonic: mnemonicObj,
         );
         final descriptor = await Descriptor.newBip84(
           secretKey: descriptorSecretKey,
-          network: Network.testnet,
+          network: Network.bitcoin,
           keychain: e,
         );
         descriptors.add(descriptor);
@@ -91,6 +91,16 @@ class WalletController extends GetxController {
   }
 
   Future<void> syncWallet() async {
-    genWallet!.wallet.sync(blockchain: blockchain);
+    await genWallet!.wallet.sync(blockchain: blockchain);
+  }
+
+  Future<void> fetchTransanctions() async {
+    // await syncWallet();
+    List<LocalUtxo> unspentTokens = genWallet!.wallet.listUnspent();
+    if (unspentTokens.isNotEmpty) {
+      log(unspentTokens[0].outpoint.txid.toString());
+    } else {
+      log("No unspent tokens");
+    }
   }
 }

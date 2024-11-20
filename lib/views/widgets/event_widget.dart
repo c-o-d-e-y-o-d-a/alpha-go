@@ -19,7 +19,7 @@ class EventWidget extends StatelessWidget {
             color: Colors.black,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Color(0xffb4914b),
+              color: const Color(0xffb4914b),
             )),
         // color: Colors.white,
         child: Column(
@@ -34,7 +34,7 @@ class EventWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.px,
                 fontFamily: 'Cinzel',
-                color: Color(0xffb4914b),
+                color: const Color(0xffb4914b),
               ),
             ),
             Text(
