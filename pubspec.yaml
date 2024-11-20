@@ -61,7 +61,7 @@ dependencies:
   responsive_sizer: ^3.3.1
   mapbox_maps_flutter: ^2.3.0
   flutter_chat_types: any
-  http: any
+  http: ^1.2.2
   path_provider: any
 
 dev_dependencies:

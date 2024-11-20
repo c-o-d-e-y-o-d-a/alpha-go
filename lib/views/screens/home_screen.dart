@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image/image.dart' as img;
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:latlong2/latlong.dart' as ltlng;
@@ -118,7 +117,7 @@ class _MapHomePageState extends State<MapHomePage> {
         data: json.encode(location)));
 
     final eventModelId = "event-${event.eventName.split(' ')[0]}";
-    final eventModelUri =
+    const eventModelUri =
         "https://github.com/M4dhav/alpha-go/raw/dev/assets/bitcoin/scene.gltf";
     await mapboxMap?.style.addStyleModel(eventModelId, eventModelUri);
 
