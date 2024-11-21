@@ -1,8 +1,11 @@
+import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
 import 'package:alpha_go/views/screens/rooms.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/get_core.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class NavBar extends StatefulWidget {
@@ -13,6 +16,7 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
+  TimelinePostController controller = Get.find();
   int _selectedIndex = 2;
   static final List<Widget> _widgetOptions = <Widget>[
     const RoomsPage(),
@@ -50,6 +54,9 @@ class _NavBarState extends State<NavBar> {
             ),
           ),
           onPressed: () {
+            if (_selectedIndex == 2) {
+              controller.addPostToTimeline();
+            }
             setState(() {
               _selectedIndex = 2;
             });

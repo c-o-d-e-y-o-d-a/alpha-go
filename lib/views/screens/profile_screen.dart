@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
@@ -22,6 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final SharedPreferences prefs = Get.find();
+  final TimelinePostController postController = Get.find();
   bool isFetchingBalance = false;
   Uint8List? _imageData;
   bool _isLoading = true;
@@ -34,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await controller.fetchTransanctions();
       await _fetchImage();
       await _fetchRuneBalances();
+      await postController.getPosts();
     });
   }
 
@@ -373,7 +376,25 @@ class _ProfilePageState extends State<ProfilePage> {
                           Expanded(
                             child: TabBarView(
                               children: <Widget>[
-                                Text('Tab3'),
+                                _isLoading
+                                    ? Center(child: CircularProgressIndicator())
+                                    : LayoutBuilder(
+                                        builder: (context, constraints) {
+                                        return ListView.builder(
+                                          itemCount:
+                                              postController.posts.length,
+                                          itemBuilder: (context, index) {
+                                            final post =
+                                                postController.posts[index];
+                                            return Image.network(
+                                              post.imageUrl,
+                                              height: constraints.maxHeight,
+                                              fit: BoxFit.contain,
+                                            );
+                                            ;
+                                          },
+                                        );
+                                      }),
                                 _isLoading
                                     ? Center(child: CircularProgressIndicator())
                                     : ListView.builder(
