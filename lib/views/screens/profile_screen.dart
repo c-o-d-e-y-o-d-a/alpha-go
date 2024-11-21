@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
@@ -23,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isFetchingBalance = false;
   Uint8List? _imageData;
   bool _isLoading = true;
+  List<Map<String, dynamic>> _results = [];
 
   @override
   void initState() {
@@ -30,7 +33,36 @@ class _ProfilePageState extends State<ProfilePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller.fetchTransanctions();
       await _fetchImage();
+      await _fetchRuneBalances();
     });
+  }
+
+  Future<void> _fetchRuneBalances() async {
+    final url = Uri.parse(
+        'https://api.hiro.so/runes/v1/addresses/${controller.address}/balances?offset=0');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Parse JSON response
+        final Map<String, dynamic> data = jsonDecode(response.body);
+
+        setState(() {
+          // Extract the "results" field
+          _results = List<Map<String, dynamic>>.from(data['results']);
+          _isLoading = false;
+        });
+      } else {
+        throw Exception(
+            'Failed to load balances. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Error fetching balances: $e');
+    }
   }
 
   Future<void> _fetchImage() async {
@@ -41,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (response.statusCode == 200) {
         setState(() {
           _imageData = response.bodyBytes; // Get binary image data
-          _isLoading = false;
+          // _isLoading = false;
         });
       } else {
         throw Exception('Failed to load image');
@@ -341,12 +373,21 @@ class _ProfilePageState extends State<ProfilePage> {
                           Expanded(
                             child: TabBarView(
                               children: <Widget>[
-                                Text("Tab1"),
+                                Text('Tab3'),
+                                _isLoading
+                                    ? Center(child: CircularProgressIndicator())
+                                    : ListView.builder(
+                                        itemCount: _results.length,
+                                        itemBuilder: (context, index) {
+                                          final result = _results[index];
+                                          return Text(
+                                              "Name: ${result['rune']['name']}, Balance: ${result['balance']}");
+                                        },
+                                      ),
                                 _isLoading
                                     ? const Center(
                                         child: CircularProgressIndicator())
                                     : Image.memory(_imageData!),
-                                Text('Tab3')
                               ],
                             ),
                           ),

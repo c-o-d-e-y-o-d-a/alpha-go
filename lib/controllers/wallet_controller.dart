@@ -11,6 +11,7 @@ class WalletController extends GetxController {
   String? mnemonic;
   String? address;
   int? balance;
+  List<LocalUtxo> unspentTokens = [];
 
   Future<void> generateMnemonicHandler() async {
     var res = await Mnemonic.create(WordCount.words12);
@@ -43,11 +44,16 @@ class WalletController extends GetxController {
           network: Network.bitcoin,
           mnemonic: mnemonicObj,
         );
-        final descriptor = await Descriptor.newBip84(
-          secretKey: descriptorSecretKey,
-          network: Network.bitcoin,
-          keychain: e,
-        );
+        // final descriptor = await Descriptor.newBip84(
+        //   secretKey: descriptorSecretKey,
+        //   network: Network.bitcoin,
+        //   keychain: e,
+        // );
+        final descriptor = await Descriptor.newBip86(
+            secretKey: descriptorSecretKey,
+            network: Network.bitcoin,
+            keychain: e);
+        // final descriptor = await Descriptor.create(descriptor: '', network: Network.bitcoin);
         descriptors.add(descriptor);
       }
       return descriptors;
@@ -96,9 +102,9 @@ class WalletController extends GetxController {
 
   Future<void> fetchTransanctions() async {
     // await syncWallet();
-    List<LocalUtxo> unspentTokens = genWallet!.wallet.listUnspent();
+    unspentTokens = genWallet!.wallet.listUnspent();
     if (unspentTokens.isNotEmpty) {
-      log(unspentTokens[0].outpoint.txid.toString());
+      log(unspentTokens.length.toString());
     } else {
       log("No unspent tokens");
     }
