@@ -1,4 +1,6 @@
+import 'package:alpha_go/models/firebase_model.dart';
 import 'package:alpha_go/models/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -13,16 +15,12 @@ class UserController extends GetxController {
     user = newUser;
   }
 
-  void updatePfpUrl(String newPfpUrl) {
-    user.pfpUrl = newPfpUrl;
+  Future<WalletUser> getHost(String uid) async {
+    DocumentSnapshot userDoc = await FirebaseUtils.users.doc(uid).get();
+    return WalletUser.fromMap(userDoc.data() as Map<String, dynamic>);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'pfpUrl': user.pfpUrl,
-      'walletAddress': user.walletAddress,
-      'accountName': user.accountName,
-      'bio': user.bio,
-    };
+  void updatePfpUrl(String newPfpUrl) {
+    user.pfpUrl = newPfpUrl;
   }
 }

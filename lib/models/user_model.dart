@@ -1,5 +1,5 @@
 class WalletUser {
-  String? pfpUrl;
+  String pfpUrl;
   final String walletAddress;
   final String accountName;
   final String bio;
@@ -10,4 +10,19 @@ class WalletUser {
     required this.accountName,
     required this.bio,
   });
+
+  WalletUser.fromMap(Map<String, dynamic> map)
+      : pfpUrl = map['pfpUrl'],
+        walletAddress = map['walletAddress'],
+        accountName = map['accountName'],
+        bio = map['bio'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'pfpUrl': pfpUrl,
+      'walletAddress': walletAddress,
+      'accountName': accountName,
+      'bio': bio,
+    };
+  }
 }

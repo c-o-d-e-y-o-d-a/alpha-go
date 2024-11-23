@@ -7,7 +7,8 @@ class EventModel {
   final GeoPoint location;
   final DateTime startTime;
   final DateTime endTime;
-  final String ownerId;
+  final List<dynamic> hostId;
+  final String locationName;
   final int cost;
 
   EventModel({
@@ -17,8 +18,9 @@ class EventModel {
     required this.location,
     required this.startTime,
     required this.endTime,
-    required this.ownerId,
+    required this.hostId,
     required this.cost,
+    required this.locationName,
   });
 
   EventModel.fromMap(Map<String, dynamic> map)
@@ -28,8 +30,9 @@ class EventModel {
         location = map['location'],
         startTime = DateTime.parse(map['startTime']),
         endTime = DateTime.parse(map['endTime']),
-        ownerId = map['ownerId'],
-        cost = map['cost'];
+        hostId = map['hostId'],
+        cost = map['cost'],
+        locationName = map['locationName'];
   Map<String, dynamic> toMap() {
     return {
       'imageUrl': imageUrl,
@@ -38,8 +41,9 @@ class EventModel {
       'location': GeoPoint(location.latitude, location.longitude),
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
-      'ownerId': ownerId,
+      'hostId': hostId,
       'cost': cost,
+      'locationName': locationName,
     };
   }
 }

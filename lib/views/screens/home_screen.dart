@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:alpha_go/controllers/event_controller.dart';
+import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/models/event_model.dart';
+import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,7 @@ class _MapHomePageState extends State<MapHomePage> {
   Image? pointerImage;
   mb.MapboxMap? mapboxMap;
   final EventController eventController = Get.find();
+  final UserController userController = Get.find();
   final styleUrl = "mapbox://styles/powerclubglobal/cm2tx1qrp00fy01qw4oga0dqk";
   static final List<String> countries = ['India', 'China', 'Russia'];
 
@@ -146,13 +149,20 @@ class _MapHomePageState extends State<MapHomePage> {
     log('puck added');
   }
 
-  _onTapListener(mb.MapContentGestureContext context) {
+  _onTapListener(mb.MapContentGestureContext context) async {
     EventModel tappedEvent = eventController.events.firstWhere((element) =>
         element.location.latitude.toStringAsPrecision(5) ==
             context.point.coordinates.lat.toStringAsPrecision(5) &&
         element.location.longitude.toStringAsPrecision(5) ==
             context.point.coordinates.lng.toStringAsPrecision(5));
-    Get.dialog(EventWidget(event: tappedEvent));
+    List<WalletUser> hosts = [];
+    for (String hostId in tappedEvent.hostId) {
+      hosts.add(await userController.getHost(hostId));
+    }
+    Get.dialog(EventWidget(
+      event: tappedEvent,
+      hosts: hosts,
+    ));
 
     log('tapped${tappedEvent.eventName}');
   }

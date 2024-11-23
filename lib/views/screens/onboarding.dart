@@ -151,7 +151,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ));
                         await FirebaseUtils.users
                             .doc(controller.address)
-                            .set(userController.toJson());
+                            .set(userController.user.toJson());
                         Get.off(() => const NavBar());
                       },
                       child: const Text('Submit')),

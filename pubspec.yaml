@@ -63,6 +63,9 @@ dependencies:
   flutter_chat_types: any
   http: ^1.2.2
   path_provider: any
+  intl: ^0.20.0
+  avatar_stack: ^1.2.0
+  cached_network_image: 
 
 dev_dependencies:
   flutter_test:
