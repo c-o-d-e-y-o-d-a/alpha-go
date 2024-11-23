@@ -1,9 +1,6 @@
-<<<<<<< Updated upstream
 import 'package:alpha_go/models/const_model.dart';
-import 'package:alpha_go/views/screens/chat.dart';
-=======
+// import 'package:alpha_go/views/screens/chat.dart';
 import 'package:alpha_go/views/screens/chat-screens/chat.dart';
->>>>>>> Stashed changes
 import 'package:alpha_go/views/screens/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
