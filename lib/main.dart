@@ -117,7 +117,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
         ),
-        home: EventWidgetTestingScreen(),
+        home: initWidget,
       );  
     });
   }
