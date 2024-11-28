@@ -1,6 +1,6 @@
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/widgets/NFT_card_widget.dart';
+import 'package:alpha_go/views/widgets/nft_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -11,16 +11,16 @@ class EventDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String eventDescription =
+    const String eventDescription =
         'Join us for an exclusive event where innovation meets creativity. '
         'Discover the future of digital experiences and network with top industry leaders.\n\n'
         'This event will showcase cutting-edge technologies, immersive workshops, and inspiring keynote speeches. '
         'Whether you are a tech enthusiast, an artist, or an entrepreneur, this is an opportunity to connect and grow.\n\n'
         'Event Highlights:\n- Keynote by renowned speakers\n- Interactive workshops\n- Exclusive NFT rewards';
 
-    final String eventDetails = 'Number of Attendees: 500+\n'
-        'Venue: Metaverse Convention Center\n'
-        'Timing: 10:00 AM - 5:00 PM';
+     String eventDetails = 'Name of Event: ${event.eventName}+\n'
+        'Venue: ${event.locationName}\n'
+        'Cost: ${event.cost}\n';
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -50,7 +50,7 @@ class EventDetailsPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.amber,
-                    width: 2,
+                    width: 3.sp,
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -64,22 +64,22 @@ class EventDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Event Title
               Text(
                 event.eventName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xffb4914b),
+                  color: Color(0xffb4914b),
                 ),
               ),
               SizedBox(height: 1.h),
 
               // Event Date and Venue
               Text(
-                event.startTime.toString() + "-"+ event.endTime.toString() + " | " + event.locationName.toString(),
+                "${event.startTime}-${event.endTime} | ${event.locationName}",
                 style: TextStyle(
                   fontSize: 14.px,
                   color: const Color(0xffb4914b),

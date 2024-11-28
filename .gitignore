@@ -13,7 +13,7 @@ android/app/google-services.json
 lib/firebase_options.dart
 ios/firebase_app_id_file.json
 android/app/build/
-
+lib/views/screens/testing-screens/
 # IntelliJ related
 *.iml
 *.ipr

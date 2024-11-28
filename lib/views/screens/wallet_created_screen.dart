@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/home_screen.dart';
-import 'package:alpha_go/views/screens/messaging_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
@@ -159,7 +158,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                       child: ElevatedButton(
                         style: Constants.buttonStyle,
                         onPressed: () {
-                          Get.to(() => const MessagingScreen());
+                          Get.to(() => const MapHomePage());
                           //above navigation is only for testing
                           if (FirebaseAuth.instance.currentUser != null) {
                             Get.off(const OnboardingScreen());

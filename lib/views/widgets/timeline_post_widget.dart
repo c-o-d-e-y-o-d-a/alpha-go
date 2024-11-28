@@ -8,25 +8,25 @@ class TimelineItem extends StatelessWidget {
   final String timestamp;
 
   const TimelineItem({
-    Key? key,
+    super.key,
     required this.index,
     required this.imageUrl,
     required this.timestamp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xffb4914b), width: 1),
+        border: Border.all(color: const Color(0xffb4914b), width: 1.sp),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Stack(
         children: [
           Container(
             width: double.infinity,
-            height: 40.h,
+            height: 38.h,
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xffb4914b)),
               borderRadius: BorderRadius.circular(10),
@@ -39,12 +39,19 @@ class TimelineItem extends StatelessWidget {
           Positioned(
             top: 8,
             right: 8,
-            child: Text(
-              timestamp,
-              style: TextStyle(
-                color: const Color(0xffb4914b),
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+            child: Container(
+              padding: EdgeInsets.all(3.px),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                timestamp,
+                style:  TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 12.px,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

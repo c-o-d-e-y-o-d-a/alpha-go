@@ -6,16 +6,16 @@ class GoldenButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const GoldenButton({
-    Key? key,
+    super.key, 
     required this.text,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, backgroundColor: Color(0xffb4914b), // Text color
+        foregroundColor: Colors.white, backgroundColor: const Color(0xffb4914b), 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0), // Rounded corners
         ),

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+        leading: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
             backgroundImage:
                 NetworkImage('https://i.pravatar.cc/300'), // Dummy user PFP
           ),
         ),
         titleSpacing: 0, // Remove default spacing between title and leading
-        title: Padding(
-          padding: const EdgeInsets.only(right: 16.0), // Move text to the right
-          child: const Text(
+        title: const Padding(
+          padding: EdgeInsets.only(right: 16.0), // Move text to the right
+          child: Text(
             "User Name",
             style: TextStyle(
               color: Color(0xFFB4914B), // Gold color
@@ -40,7 +40,7 @@ class ChatScreen extends StatelessWidget {
             false, // Keep the title left aligned relative to the avatar
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/bg.jpg'), // Background image asset
             fit: BoxFit.cover,
@@ -80,7 +80,7 @@ class ChatScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isSender ? "12:${index} PM" : "12:${index} AM",
+                            isSender ? "12:$index PM" : "12:$index AM",
                             style: const TextStyle(
                               color: Color(0xFFB4914B), // Gold text
                               fontSize: 12,

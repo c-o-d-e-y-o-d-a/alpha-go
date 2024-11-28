@@ -2,11 +2,7 @@ import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/views/screens/chat-screens/chat_room.dart';
-import 'package:alpha_go/views/screens/messaging_screen.dart';
-import 'package:alpha_go/views/screens/navbar-sample-screen.dart';
-import 'package:alpha_go/views/screens/terms-of-service/terms_and_conditions_page.dart';
-import 'package:alpha_go/views/screens/testing-screens/event-widget-testing-screen.dart';
+import 'package:alpha_go/views/screens/terms_of_service/terms_and_conditions_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:alpha_go/views/screens/login_screen.dart';
@@ -117,7 +113,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
         ),
-        home: initWidget,
+        home: TermsAndConditionsPage(),
       );  
     });
   }

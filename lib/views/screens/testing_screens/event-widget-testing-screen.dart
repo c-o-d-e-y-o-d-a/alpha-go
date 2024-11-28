@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class EventWidgetTestingScreen extends StatelessWidget {
+  const EventWidgetTestingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Sample event and hosts data
@@ -15,7 +17,7 @@ class EventWidgetTestingScreen extends StatelessWidget {
       imageUrl: 'https://images.unsplash.com/photo-1610177498573-78deaa4a797b?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       locationName: 'The Gates HOtel South Beach',
       startTime: DateTime.now(),
-      endTime: DateTime.now().add(Duration(hours: 2)),
+      endTime: DateTime.now().add(const Duration(hours: 2)),
       location: const GeoPoint(78.0, 32.0),
       hostId: ['Jessy Artman', 'PowerClubGloball'],
       description: 'odjfdsof isdoif sdoij  dsoi fods ',
@@ -37,7 +39,7 @@ class EventWidgetTestingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Widget Testing Screen'),
+        title: const Text('Event Widget Testing Screen'),
       ),
       backgroundColor: Colors.black,
       body: Center(
@@ -45,7 +47,7 @@ class EventWidgetTestingScreen extends StatelessWidget {
             onPressed: () {
               Get.dialog(EventWidget(event: sampleEvent, hosts: sampleHosts));
             },
-            child: Text('Sex Me')),
+            child: const Text('Sex Me')),
       ),
     );
   }

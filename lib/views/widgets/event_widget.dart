@@ -1,16 +1,14 @@
-import 'dart:developer';
 
-import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/screens/testing-screens/event_details_screen.dart';
+import 'package:alpha_go/views/screens/event_details_screen.dart';
+import 'package:alpha_go/views/screens/testing_screens/event_details_screen.dart';
 import 'package:alpha_go/views/widgets/location_time_widget.dart';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class EventWidget extends StatelessWidget {
@@ -129,7 +127,10 @@ class EventWidget extends StatelessWidget {
                         //   event: event,
                         //   hosts: hosts,
                         // ));
-                        Get.to(() => EventDetailsPage(event: event, hosts: hosts,));
+                        Get.to(() => EventDetailsScreen(
+                          event: event,
+                          hosts: hosts,
+                        ));
                       },
                       child: Text(
                         "Details",

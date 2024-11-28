@@ -1,5 +1,4 @@
-import 'package:alpha_go/views/screens/chat-screens/chat.dart';
-import 'package:alpha_go/views/widgets/navbar_widget.dart';
+import 'package:alpha_go/views/screens/chat_screens/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -17,24 +16,19 @@ class _MessagingScreenState extends State<MessagingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: CustomNavBar(
-        username: "@TB1QT5JWMV83D...",
-        onAddPressed: () {
-          print("Add Pressed");
-        },
-        onMenuPressed: () {
-          print("Menu Pressed");
-        },
-        onCopyPressed: () {
-          print("Copy Pressed");
-        },
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          "Messaging",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10,),
             // Search Bar with Icons
             Row(
               children: [
@@ -44,10 +38,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Search",
-                        hintStyle: const TextStyle(color: Color(0xFFB4914B)),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         filled: true,
-                        
-                        fillColor: const Color.fromARGB(255, 85, 84, 84),
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
                           borderSide: BorderSide.none,
@@ -102,7 +95,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
             ),
             const SizedBox(height: 8.0),
             SizedBox(
-              height: 140.0,
+              height: 100.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 4, // Example count
@@ -110,29 +103,34 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Container(
-                      width: 100.0,
+                      width: 80.0,
                       decoration: BoxDecoration(
                         color: Colors.black, // Black background
-                        borderRadius: BorderRadius.circular(24.0),
+                        borderRadius: BorderRadius.circular(12.0),
                         border: Border.all(
                           color: const Color(0xFFB4914B), // Gold border
-                          width: 1,
+                          width: 2,
                         ),
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          
+                          Text(
+                            "Room ${index + 1}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           const Spacer(),
                           const Text(
                             "Gold Text",
                             style: TextStyle(
-                              color: Colors.white, // Gold text
+                              color: Color(0xFFB4914B), // Gold text
                               fontSize: 12,
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                          const SizedBox(height: 28.0),
                         ],
                       ),
                     ),
@@ -149,7 +147,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   return MessageWidget(
                     name: "Person ${index + 1}",
                     message:
-                        "This is a sample",
+                        "This is a sample message from Person ${index + 1}",
                     time: "12:${index}0 PM",
                   );
                 },
@@ -195,7 +193,10 @@ class MessageWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.black, // Black background
-           
+            border: Border.all(
+              color: const Color(0xFFB4914B), // Gold border
+              width: 2,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -213,7 +214,7 @@ class MessageWidget extends StatelessWidget {
                     Text(
                       name,
                       style: const TextStyle(
-                        color: Color(0xFFB4914B),
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -234,7 +235,7 @@ class MessageWidget extends StatelessWidget {
                     Text(
                       time,
                       style: const TextStyle(
-                        color: Color(0xFFB4914B),
+                        color: Colors.grey,
                         fontSize: 14,
                       ),
                     ),

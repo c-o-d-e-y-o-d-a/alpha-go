@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TermsAndConditionsPage extends StatefulWidget {
-  const TermsAndConditionsPage({Key? key}) : super(key: key);
+  const TermsAndConditionsPage({super.key});
 
   @override
   State<TermsAndConditionsPage> createState() => _TermsAndConditionsPageState();
@@ -56,11 +57,11 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title:  Text(
           "Terms and Conditions",
           style: TextStyle(
             color: Color(0xFFB4914B), // Gold color
-            fontSize: 20,
+            fontSize: 20.px,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -80,10 +81,10 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
           // Terms and Conditions Content
           SingleChildScrollView(
             controller: _scrollController,
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+            padding:  EdgeInsets.all(16.sp),
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 // Text(
                 //   "Terms and Conditions",
                 //   style: TextStyle(
@@ -92,7 +93,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 //     fontWeight: FontWeight.bold,
                 //   ),
                 // ),
-                SizedBox(height: 16),
+                SizedBox(height: 2.h),
                 Text(
                   "1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.\n\n"
                   "2. Curabitur sit amet massa nec ligula scelerisque sollicitudin. Morbi feugiat, neque a facilisis consectetur, "
@@ -106,7 +107,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 6.h),
                 Text(
                   "By accepting these terms and conditions, you agree to abide by the rules outlined above.",
                   style: TextStyle(
@@ -114,7 +115,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 100), // Add extra space for bottom buttons
+                SizedBox(height: 20.h), // Add extra space for bottom buttons
               ],
             ),
           ),
@@ -130,9 +131,9 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                         const Color.fromARGB(255, 0, 0, 0), // Black background
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      side: const BorderSide(
+                      side:  BorderSide(
                         color: Color(0xFFB4914B), // Gold color
-                        width: 2, // Border width
+                        width: 0.7.w, // Border width
                       ),
                     ),
                   ),
@@ -153,6 +154,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                       ),
                     ),
                     onPressed: () {
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -162,10 +164,11 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                           backgroundColor: Color(0xFFB4914B), // Gold color
                         ),
                       );
+                      
                     },
                     child: const Text(
                       "Accept and Continue",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
                     ),
                   ),
               ],

@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
-  final String username;
-  final VoidCallback onAddPressed;
-  final VoidCallback onMenuPressed;
-  final VoidCallback onCopyPressed;
+  final Widget leadingWidget;
+  final Widget actionWidgets;
 
   const CustomNavBar({
-    Key? key,
-    required this.username,
-    required this.onAddPressed,
-    required this.onMenuPressed,
-    required this.onCopyPressed,
-  }) : super(key: key);
+    super.key,
+    required this.leadingWidget,
+    required this.actionWidgets,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.black,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20), // Only bottom-left is rounded
           bottomRight: Radius.circular(20), // Only bottom-right is rounded
         ),
-        
+
         // boxShadow: [
         //   BoxShadow(
         //     color: Colors.grey.shade300,
@@ -33,59 +29,60 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
         //   ),
         // ],
 
-        border: const Border(
+        border: Border(
           bottom:
               BorderSide(color: Color(0xffb4914b), width: 2), // Bottom border
         ),
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 16, vertical: 13), // Increased vertical padding
+          padding:  EdgeInsets.symmetric(
+              horizontal: 4.w, vertical: 13), // Increased vertical padding
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
-              Row(
-                children: [
-                  Text(
-                    username,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xffb4914b),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: username));
-                      onCopyPressed();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Username copied!")),
-                      );
-                    },
-                    child: const Icon(Icons.copy,
-                        size: 18, color: Color(0xffb4914b)),
-                  ),
-                ],
-              ),
+              leadingWidget,
+              // Row(
+              //   children: [
+              //     Text(
+              //       username,
+              //       style: const TextStyle(
+              //         fontSize: 18,
+              //         fontWeight: FontWeight.bold,
+              //         color: Color(0xffb4914b),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 8),
+              //     GestureDetector(
+              //       onTap: () {
+              //         Clipboard.setData(ClipboardData(text: username));
+              //         onCopyPressed();
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           const SnackBar(content: Text("Username copied!")),
+              //         );
+              //       },
+              //       child: const Icon(Icons.copy,
+              //           size: 18, color: Color(0xffb4914b)),
+              //     ),
+              //   ],
+              // ),
 
               // Grouped icons for Add and Menu
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.add_box,
-                        size: 26, color: Color(0xffb4914b)),
-                    onPressed: onAddPressed,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.menu,
-                        size: 29, color: Color(0xffb4914b)),
-                    onPressed: onMenuPressed,
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     IconButton(
+              //       icon: const Icon(Icons.add_box,
+              //           size: 26, color: Color(0xffb4914b)),
+              //       onPressed: onAddPressed,
+              //     ),
+              //     IconButton(
+              //       icon: const Icon(Icons.menu,
+              //           size: 29, color: Color(0xffb4914b)),
+              //       onPressed: onMenuPressed,
+              //     ),
+              //   ],
+              // ),
+              actionWidgets,
             ],
           ),
         ),
@@ -94,5 +91,5 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80.0); // Increased height
+  Size get preferredSize =>  Size.fromHeight(10.h); // Increased height
 }
