@@ -17,7 +17,7 @@ class NFTDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserController userController = Get.find();
 
-    const String NftDescription = 'This is a detailed description of the NFT. '
+    const String nftDescription = 'This is a detailed description of the NFT. '
         'It includes information about its creation, significance, and other relevant details.\n\n'
         'The NFT was created by a renowned digital artist known for their unique style and innovative approach. '
         'Each piece in this collection is a one-of-a-kind digital artwork that has been meticulously crafted to showcase the artist\'s vision.\n\n'
@@ -31,12 +31,17 @@ class NFTDetailsPage extends StatelessWidget {
       appBar: CustomNavBar(
         leadingWidget: Row(
           children: [
-            Text(
-              userController.user.walletAddress.substring(0, 14),
-              style:  TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: Color(0xffb4914b),
+            Container(
+              width: 50.w,
+              child: Text(
+                
+                userController.user.walletAddress,
+                overflow: TextOverflow.ellipsis,
+                style:  TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xffb4914b),
+                ),
               ),
             ),
              SizedBox(width: 2.w),
@@ -139,7 +144,7 @@ class NFTDetailsPage extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                NftDescription,
+                nftDescription,
                 style: TextStyle(
                     fontSize: 16.px,
                     color: const Color.fromARGB(255, 194, 193, 193)),

@@ -1,4 +1,3 @@
-import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/widgets/location_time_widget.dart';

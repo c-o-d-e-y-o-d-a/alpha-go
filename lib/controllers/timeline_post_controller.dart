@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:alpha_go/models/firebase_model.dart';
@@ -19,7 +20,7 @@ class TimelinePostController extends GetxController {
         }
       });
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -44,7 +45,7 @@ class TimelinePostController extends GetxController {
           await FirebaseUtils.timelinePosts.add(post.toJson());
         });
       } catch (e) {
-        print(e);
+        log(e.toString());
       }
     }
   }

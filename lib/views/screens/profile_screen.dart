@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -35,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await controller.fetchTransanctions();
       await _fetchRuneBalances();
       await _fetchImage();
+      await controller.getBalance();
     });
   }
 
@@ -87,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isLoading = false;
       });
-      print('Error fetching balances: $e');
+      log('Error fetching balances: $e');
     }
   }
 
@@ -124,12 +126,19 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: CustomNavBar(
           leadingWidget: Row(
             children: [
-              Text(
-                userController.user.walletAddress.substring(0, 14),
-                style:  TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xffb4914b),
+              Container(
+                width: 50.w,
+              
+                child: Text(
+                
+                  userController.user.walletAddress,
+                  
+                  overflow: TextOverflow.ellipsis,
+                  style:  TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xffb4914b),
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
@@ -143,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 },
                 child:
-                     Icon(Icons.copy, size: 18.sp, color: Color(0xffb4914b)),
+                     Icon(Icons.copy, size: 18.sp, color: const Color(0xffb4914b)),
               ),
             ],
           ),
@@ -151,12 +160,12 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               IconButton(
                 icon:  Icon(Icons.add_box,
-                    size: 26.px, color: Color(0xffb4914b)),
+                    size: 26.px, color: const Color(0xffb4914b)),
                 onPressed: () {},
               ),
               IconButton(
                 icon:
-                     Icon(Icons.menu, size: 29.px, color: Color(0xffb4914b)),
+                     Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
                 onPressed: () {},
               ),
             ],
@@ -195,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   CircleAvatar(
                                     radius: 12.w,
                                     backgroundImage: NetworkImage(
-                                        userController.user.pfpUrl ?? ""),
+                                        userController.user.pfpUrl ),
                                     backgroundColor: Colors.grey,
                                   ),
                                   SizedBox(height: 1.h),
@@ -203,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        userController.user.accountName ?? "User",
+                                        userController.user.accountName,
                                         style: TextStyle(
                                           color: const Color(0xffb4914b),
                                           fontSize: 19.sp,
@@ -214,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   SizedBox(height: 0.4.h),
                                   Text(
-                                    userController.user.bio ?? "",
+                                    userController.user.bio ,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15.sp,

@@ -158,8 +158,7 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                       child: ElevatedButton(
                         style: Constants.buttonStyle,
                         onPressed: () {
-                          Get.to(() => const MapHomePage());
-                          //above navigation is only for testing
+                          
                           if (FirebaseAuth.instance.currentUser != null) {
                             Get.off(const OnboardingScreen());
                             

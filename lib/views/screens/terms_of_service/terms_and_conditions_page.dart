@@ -60,7 +60,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
         title:  Text(
           "Terms and Conditions",
           style: TextStyle(
-            color: Color(0xFFB4914B), // Gold color
+            color: const Color(0xFFB4914B), // Gold color
             fontSize: 20.px,
             fontWeight: FontWeight.bold,
           ),
@@ -94,7 +94,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 //   ),
                 // ),
                 SizedBox(height: 2.h),
-                Text(
+                const Text(
                   "1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.\n\n"
                   "2. Curabitur sit amet massa nec ligula scelerisque sollicitudin. Morbi feugiat, neque a facilisis consectetur, "
                   "felis augue gravida nunc, nec ultrices sem sapien in purus.\n\n"
@@ -108,7 +108,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                   ),
                 ),
                 SizedBox(height: 6.h),
-                Text(
+                const Text(
                   "By accepting these terms and conditions, you agree to abide by the rules outlined above.",
                   style: TextStyle(
                     color: Color(0xFFB4914B), // Gold color
@@ -132,7 +132,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side:  BorderSide(
-                        color: Color(0xFFB4914B), // Gold color
+                        color: const Color(0xFFB4914B), // Gold color
                         width: 0.7.w, // Border width
                       ),
                     ),
