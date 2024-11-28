@@ -103,8 +103,11 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   child: ElevatedButton(
                     style: Constants.buttonStyle,
                     onPressed: () async {
-                      final alphanumeric =
-                          RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$');
+                      // final alphanumeric =
+                      //     RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$');
+                          final alphanumeric = RegExp(
+                          r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$');// fix to above regex
+
                       log(alphanumeric.hasMatch(password.text).toString());
                       if (widget.isEnter) {
                         if (password.text == controller.password) {

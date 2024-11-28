@@ -62,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   radius: 70,
                   backgroundColor: const Color(0xffb4914b),
                   foregroundImage: !isUploading
-                      ? NetworkImage(userController.user.pfpUrl ?? "")
+                      ? NetworkImage(userController.user.pfpUrl)
                       : null,
                   child: isUploading ? const CircularProgressIndicator() : null,
                 ),
@@ -140,11 +140,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             firstName: name.text,
                             lastName: controller.address,
                             id: user.uid, // UID from Firebase Authentication
-                            imageUrl: userController.user.pfpUrl ?? "",
+                            imageUrl: userController.user.pfpUrl ,
                           ),
                         );
                         userController.setUser(WalletUser(
-                          pfpUrl: userController.user.pfpUrl ?? "",
+                          pfpUrl: userController.user.pfpUrl ,
                           walletAddress: controller.address!,
                           accountName: name.text,
                           bio: bio.text,

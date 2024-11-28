@@ -20,7 +20,7 @@ class TimelinePostController extends GetxController {
         }
       });
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -45,7 +45,7 @@ class TimelinePostController extends GetxController {
           await FirebaseUtils.timelinePosts.add(post.toJson());
         });
       } catch (e) {
-        print(e);
+        log(e.toString());
       }
     }
   }

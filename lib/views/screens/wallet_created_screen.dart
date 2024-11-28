@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
+import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
@@ -157,8 +158,10 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                       child: ElevatedButton(
                         style: Constants.buttonStyle,
                         onPressed: () {
+                          
                           if (FirebaseAuth.instance.currentUser != null) {
                             Get.off(const OnboardingScreen());
+                            
                           }
                         },
                         child: const Text("Continue"),

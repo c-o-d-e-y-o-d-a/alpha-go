@@ -1,16 +1,18 @@
 import 'dart:convert';
-
+import 'dart:developer';
+import 'dart:io';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/models/const_model.dart';
+import 'package:alpha_go/views/screens/nft_details_screen.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
+import 'package:alpha_go/views/widgets/timeline_post_widget.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -22,38 +24,61 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
-  final SharedPreferences prefs = Get.find();
   final TimelinePostController postController = Get.find();
-  bool isFetchingBalance = false;
-  Uint8List? _imageData;
   bool _isLoading = true;
   List<Map<String, dynamic>> _results = [];
+  Uint8List? _imageData;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller.fetchTransanctions();
-      await _fetchImage();
       await _fetchRuneBalances();
-      await postController.getPosts();
+      await _fetchImage();
+      await controller.getBalance();
     });
   }
 
-  Future<void> _fetchRuneBalances() async {
-    final url = Uri.parse(
-        'https://api.hiro.so/runes/v1/addresses/${controller.address}/balances?offset=0');
-
+  Future<double> getUsdtPrice() async {
     try {
-      final response = await http.get(url);
+      final response = await http.get(
+        Uri.parse('https://rest.coinapi.io/v1/exchangerate/BTC/USD'),
+        headers: {
+          HttpHeaders.authorizationHeader:
+              'D07A3A3B-7641-4158-B7F5-81A6FD8B3265',
+        },
+      );
 
       if (response.statusCode == 200) {
-        // Parse JSON response
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        // Decode the response body
+        Map<String, dynamic> data = json.decode(response.body);
 
+        // Extract the rate
+        double rate = data['rate'];
+
+        // Convert 2 satoshis to BTC and then to USD
+        double priceInUsd = (controller.balance! / 100000000) * rate;
+
+        return priceInUsd;
+      } else {
+        throw Exception('Failed to load exchange rate');
+      }
+    } catch (e) {
+      return 0; // Return 0 or handle error appropriately
+    }
+  }
+
+
+  Future<void> _fetchRuneBalances() async {
+    final url = Uri.parse(
+        'https://api.hiro.so/runes/v1/addresses/${controller.address ?? ""}/balances?offset=0');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
         setState(() {
-          // Extract the "results" field
-          _results = List<Map<String, dynamic>>.from(data['results']);
+          _results = List<Map<String, dynamic>>.from(data['results'] ?? []);
           _isLoading = false;
         });
       } else {
@@ -64,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isLoading = false;
       });
-      print('Error fetching balances: $e');
+      log('Error fetching balances: $e');
     }
   }
 
@@ -75,8 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         setState(() {
-          _imageData = response.bodyBytes; // Get binary image data
-          // _isLoading = false;
+          _imageData = response.bodyBytes;
         });
       } else {
         throw Exception('Failed to load image');
@@ -85,7 +109,6 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isLoading = false;
       });
-      print('Error fetching image: $e');
     }
   }
 
@@ -93,331 +116,311 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
+        image: DecorationImage(
+          image: AssetImage('assets/bg.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          // shape: RoundedRectangleBorder(
-          //     side: const BorderSide(color: Color(0xffb4914b)),
-          //     borderRadius:
-          //         BorderRadius.vertical(bottom: Radius.circular(20.sp))),
-          bottom: Constants.appBarBottom,
-          leading: Padding(
-            padding: EdgeInsets.only(
-              left: 3.w,
-            ),
-            child: const Icon(
-              Icons.alternate_email,
-            ),
-          ),
-          title: Text(
-            controller.address!,
-          ),
-          leadingWidth: 9.w,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.black,
-          foregroundColor: const Color(0xffb4914b),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  await Clipboard.setData(
-                      ClipboardData(text: controller.address!));
-                  Get.snackbar(
-                      'Copy Successful', 'Wallet Address copied to clipboard',
-                      colorText: Colors.white);
+        appBar: CustomNavBar(
+          leadingWidget: Row(
+            children: [
+              Container(
+                width: 50.w,
+              
+                child: Text(
+                
+                  userController.user.walletAddress,
+                  
+                  overflow: TextOverflow.ellipsis,
+                  style:  TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xffb4914b),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(
+                      ClipboardData(text: userController.user.walletAddress));
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Username copied!")),
+                  );
                 },
-                icon: Icon(
-                  Icons.copy,
-                  size: 24.sp,
-                )),
-            IconButton(
-                onPressed: () async {
-                  await Clipboard.setData(
-                      ClipboardData(text: controller.address!));
-                  Get.snackbar(
-                      'Copy Successful', 'Wallet Address copied to clipboard',
-                      colorText: Colors.white);
-                },
-                icon: Icon(
-                  Icons.add_box_outlined,
-                  size: 24.sp,
-                )),
-            IconButton(
-                onPressed: () async {},
-                icon: Icon(
-                  Icons.menu,
-                  size: 26.sp,
-                ))
-          ],
+                child:
+                     Icon(Icons.copy, size: 18.sp, color: const Color(0xffb4914b)),
+              ),
+            ],
+          ),
+          actionWidgets: Row(
+            children: [
+              IconButton(
+                icon:  Icon(Icons.add_box,
+                    size: 26.px, color: const Color(0xffb4914b)),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon:
+                     Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
+                onPressed: () {},
+              ),
+            ],
+          ),
         ),
-        body: Padding(
-          padding:
-              EdgeInsets.only(left: 1.w, right: 1.w, top: 1.h, bottom: 1.h),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 1.h),
-                  child: Container(
-                    height: 50.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(color: const Color(0xffb4914b)),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 2.h, left: 1.w, right: 1.w, bottom: 2.h),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 90,
-                            backgroundColor: Colors.grey,
-                            backgroundImage:
-                                NetworkImage(userController.user.pfpUrl ?? ""),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 1.h),
-                            child: Text(
-                              userController.user.accountName,
-                              style: TextStyle(
-                                  color: const Color(0xffb4914b),
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 1.h),
-                            child: Text(userController.user.bio),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                width: 29.w,
-                                height: 70,
-                                child: ElevatedButton(
-                                    style: Constants.buttonStyle,
-                                    onPressed: () {},
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        const Icon(
-                                          Icons.arrow_upward,
-                                          color: Color(0xffb4914b),
-                                        ),
-                                        Text(
-                                          "SEND",
-                                          style: TextStyle(
-                                            color: const Color(0xffb4914b),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      ],
-                                    )),
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(3.h),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.share),
+                                color: const Color(0xffb4914b),
                               ),
-                              SizedBox(
-                                width: 29.w,
-                                height: 70,
-                                child: ElevatedButton(
-                                  style: Constants.buttonStyle,
-                                  onPressed: () async {
-                                    setState(() {
-                                      isFetchingBalance = true;
-                                    });
-                                    await controller.getBalance().then((value) {
-                                      setState(() {
-                                        isFetchingBalance = false;
-                                      });
-                                    });
-                                  },
-                                  child: isFetchingBalance
-                                      ? const Center(
-                                          child: CircularProgressIndicator(
-                                          color: Color(0xffb4914b),
-                                        ))
-                                      : controller.balance == null
-                                          ? Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                const Icon(
-                                                  Icons.currency_bitcoin,
-                                                  color: Color(0xffb4914b),
-                                                ),
-                                                Text(
-                                                  "BALANCE",
-                                                  style: TextStyle(
-                                                    color:
-                                                        const Color(0xffb4914b),
-                                                    fontSize: 15.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          : Text(
-                                              "${controller.balance.toString()} Sats",
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: const Color(0xffb4914b)),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 12.w,
+                                    backgroundImage: NetworkImage(
+                                        userController.user.pfpUrl ),
+                                    backgroundColor: Colors.grey,
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        userController.user.accountName,
+                                        style: TextStyle(
+                                          color: const Color(0xffb4914b),
+                                          fontSize: 19.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 0.4.h),
+                                  Text(
+                                    userController.user.bio ,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15.sp,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  FutureBuilder<double>(
+                                    future: getUsdtPrice(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                          'Error: ${snapshot.error}',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 15.sp,
+                                          ),
+                                        );
+                                      } else {
+                                        final price = snapshot.data ?? 0;
+                                        return Column(
+                                          children: [
+                                            Text(
+                                              "Current Balance",
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${controller.balance ?? 0} Sats",
+                                              style: TextStyle(
+                                                color: const Color(0xffb4914b),
+                                                fontSize: 21.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Price in USDT: $price\$",
                                               style: TextStyle(
                                                 color: const Color(0xffb4914b),
                                                 fontSize: 15.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 29.w,
-                                height: 70,
-                                child: ElevatedButton(
-                                    style: Constants.buttonStyle,
-                                    onPressed: () {},
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        const Icon(
-                                          Icons.arrow_downward,
-                                          color: Color(0xffb4914b),
-                                        ),
-                                        Text(
-                                          "RECIEVE",
-                                          style: TextStyle(
-                                            color: const Color(0xffb4914b),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.bold,
+                                          ],
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(0xffb4914b),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16),
                                           ),
-                                        )
-                                      ],
-                                    )),
-                              )
-                            ],
-                          )
-                        ],
+                                        ),
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.arrow_upward),
+                                        label: const Text(
+                                          "Send",
+                                          style:
+                                              TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ElevatedButton.icon(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16),
+                                          ),
+                                        ),
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.add),
+                                        label: const Text(
+                                          "Receive",
+                                          style:
+                                              TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                Positioned(
-                    top: 0.5.h,
-                    right: 2.w,
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.edit,
-                            )),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.ios_share_sharp,
-                            ))
+              ),
+            ];
+          },
+          body: Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.black,
+                border: Border(
+                  top: BorderSide(color: Color(0xffb4914b)),
+                  left: BorderSide(color: Color(0xffb4914b)),
+                  right: BorderSide(color: Color(0xffb4914b)),
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: DefaultTabController(
+                length: 3,
+                child: Column(
+                  children: [
+                    ButtonsTabBar(
+                      backgroundColor: Colors.transparent,
+                      unselectedBackgroundColor: Colors.transparent,
+                      contentPadding:
+                          EdgeInsets.only(top: 1.h, left: 5.w, right: 5.w),
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Cinzel',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffb4914b),
+                        decoration: TextDecoration.underline,
+                        decorationColor: Color(0xffb4914b),
+                        decorationThickness: 4,
+                        fontSize: 16,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        fontFamily: 'Cinzel',
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w100,
+                        color: const Color(0xffb4914b),
+                      ),
+                      tabs: const [
+                        Tab(text: "TIMELINE"),
+                        Tab(text: "TOKENS"),
+                        Tab(text: "NFTS"),
                       ],
-                    ))
-              ],
-            ),
-            Expanded(
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(color: const Color(0xffb4914b)),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DefaultTabController(
-                      length: 3,
-                      child: Column(
+                    ),
+                    Expanded(
+                      child: TabBarView(
                         children: <Widget>[
-                          ButtonsTabBar(
-                            backgroundColor: Colors.transparent,
-                            unselectedBackgroundColor: Colors.transparent,
-                            contentPadding: EdgeInsets.only(
-                                top: 1.h, left: 5.w, right: 5.w),
-                            borderWidth: 0,
-                            labelStyle: const TextStyle(
-                              fontFamily: 'Cinzel',
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                    color: Color(0xffb4914b),
-                                    offset: Offset(0, -5))
-                              ],
-                              color: Colors.transparent,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Color(0xffb4914b),
-                              decorationThickness: 4,
-                              decorationStyle: TextDecorationStyle.solid,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              fontFamily: 'Cinzel',
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w100,
-                              color: const Color(0xffb4914b),
-                            ),
-                            tabs: const [
-                              Tab(
-                                text: "TIMELINE",
-                              ),
-                              Tab(
-                                text: "TOKENS",
-                              ),
-                              Tab(
-                                text: "NFTS",
-                              )
-                            ],
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: postController.posts.length,
+                            itemBuilder: (context, index) {
+                              final post = postController.posts[index];
+                              final date = DateTime.fromMillisecondsSinceEpoch(
+                                  post.timestamp);
+                              final formattedDate =
+                                  "${date.day}/${date.month}/${date.year}";
+                              return TimelineItem(
+                                index: index,
+                                imageUrl: post.imageUrl,
+                                timestamp: formattedDate,
+                              );
+                            },
                           ),
-                          Expanded(
-                            child: TabBarView(
-                              children: <Widget>[
-                                _isLoading
-                                    ? Center(child: CircularProgressIndicator())
-                                    : LayoutBuilder(
-                                        builder: (context, constraints) {
-                                        return ListView.builder(
-                                          itemCount:
-                                              postController.posts.length,
-                                          itemBuilder: (context, index) {
-                                            final post =
-                                                postController.posts[index];
-                                            return Image.network(
-                                              post.imageUrl,
-                                              height: constraints.maxHeight,
-                                              fit: BoxFit.contain,
-                                            );
-                                            ;
-                                          },
-                                        );
-                                      }),
-                                _isLoading
-                                    ? Center(child: CircularProgressIndicator())
-                                    : ListView.builder(
-                                        itemCount: _results.length,
-                                        itemBuilder: (context, index) {
-                                          final result = _results[index];
-                                          return Text(
-                                              "Name: ${result['rune']['name']}, Balance: ${result['balance']}");
-                                        },
-                                      ),
-                                _isLoading
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : Image.memory(_imageData!),
-                              ],
-                            ),
+                          ListView.builder(
+                            itemCount: _results.length,
+                            itemBuilder: (context, index) {
+                              final token = _results[index];
+                              return ListTile(
+                                title: Text(token['ticker'] ?? ""),
+                                subtitle:
+                                    Text("Balance: ${token['balance'] ?? 0}"),
+                              );
+                            },
                           ),
+                          _imageData != null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => NFTDetailsPage(
+                                          imageData: _imageData,
+                                        ));
+                                  },
+                                  child: Image.memory(_imageData!),
+                                )
+                              : const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                         ],
                       ),
                     ),
-                  )),
-            )
-          ]),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
