@@ -140,7 +140,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                                 accountName: data["accountName"]!,
                                 walletAddress: data["walletAddress"]!,
                                 bio: data["bio"]!,
-                                pfpUrl: data["pfpUrl"]!));
+                                pfpUrl: data["pfpUrl"]!, externalLink: data["externalLink"]!));
                           });
 
                           Get.off(() => const NavBar());

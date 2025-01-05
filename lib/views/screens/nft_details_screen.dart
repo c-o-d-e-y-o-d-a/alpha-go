@@ -1,5 +1,6 @@
 
 import 'package:alpha_go/controllers/user_controller.dart';
+import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/golden_button.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:alpha_go/views/widgets/nft_card_widget.dart';
@@ -31,7 +32,7 @@ class NFTDetailsPage extends StatelessWidget {
       appBar: CustomNavBar(
         leadingWidget: Row(
           children: [
-            Container(
+            SizedBox(
               width: 50.w,
               child: Text(
                 
@@ -67,11 +68,14 @@ class NFTDetailsPage extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.menu, size: 29, color: Color(0xffb4914b)),
-              onPressed: () {},
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ],
         ),
       ),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(3.h),

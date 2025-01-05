@@ -5,6 +5,7 @@ import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/screens/nft_details_screen.dart';
+import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:alpha_go/views/widgets/timeline_post_widget.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -122,11 +123,11 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,  
         appBar: CustomNavBar(
           leadingWidget: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 50.w,
               
                 child: Text(
@@ -166,11 +167,14 @@ class _ProfilePageState extends State<ProfilePage> {
               IconButton(
                 icon:
                      Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
-                onPressed: () {},
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
               ),
             ],
           ),
         ),
+        drawer: const CustomDrawer(),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [

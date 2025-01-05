@@ -25,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isUploading = false;
   TextEditingController name = TextEditingController();
   TextEditingController bio = TextEditingController();
+  TextEditingController link = TextEditingController();
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final ImagePicker picker = ImagePicker();
@@ -132,6 +133,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 5.h),
+                  child: TextFormField(
+                    style: Constants.inputStyle,
+                    cursorColor: Colors.white,
+                    decoration: Constants.inputDecoration.copyWith(
+                      labelStyle: const TextStyle(color: Colors.white),
+                      labelText: 'External Link',
+                    ),
+                    controller: link,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5.h),
                   child: ElevatedButton(
                       style: Constants.buttonStyle,
                       onPressed: () async {
@@ -148,6 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           walletAddress: controller.address!,
                           accountName: name.text,
                           bio: bio.text,
+                          externalLink: link.text,
                         ));
                         await FirebaseUtils.users
                             .doc(controller.address)

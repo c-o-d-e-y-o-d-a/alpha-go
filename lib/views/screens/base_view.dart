@@ -2,6 +2,7 @@ import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
 import 'package:alpha_go/views/screens/rooms.dart';
+import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,7 @@ class _NavBarState extends State<NavBar> {
               ),
               fit: BoxFit.cover)),
       child: Scaffold(
+        drawer: const CustomDrawer(),
         extendBody: _selectedIndex == 2 ? true : false,
         backgroundColor: Colors.transparent,
         body: Center(

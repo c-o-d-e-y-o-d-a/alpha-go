@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
-import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
