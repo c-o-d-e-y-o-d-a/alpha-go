@@ -70,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
   Future<void> _fetchRuneBalances() async {
     final url = Uri.parse(
         'https://api.hiro.so/runes/v1/addresses/${controller.address ?? ""}/balances?offset=0');
@@ -123,19 +122,16 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,  
+        backgroundColor: Colors.transparent,
         appBar: CustomNavBar(
           leadingWidget: Row(
             children: [
               SizedBox(
                 width: 50.w,
-              
                 child: Text(
-                
                   userController.user.walletAddress,
-                  
                   overflow: TextOverflow.ellipsis,
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xffb4914b),
@@ -152,21 +148,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SnackBar(content: Text("Username copied!")),
                   );
                 },
-                child:
-                     Icon(Icons.copy, size: 18.sp, color: const Color(0xffb4914b)),
+                child: Icon(Icons.copy,
+                    size: 18.sp, color: const Color(0xffb4914b)),
               ),
             ],
           ),
           actionWidgets: Row(
             children: [
               IconButton(
-                icon:  Icon(Icons.add_box,
+                icon: Icon(Icons.add_box,
                     size: 26.px, color: const Color(0xffb4914b)),
                 onPressed: () {},
               ),
               IconButton(
-                icon:
-                     Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
+                icon: Icon(Icons.menu,
+                    size: 29.px, color: const Color(0xffb4914b)),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -200,7 +196,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: const Color(0xffb4914b)),
+                                border:
+                                    Border.all(color: const Color(0xffb4914b)),
                               ),
                               padding: const EdgeInsets.all(16),
                               child: Column(
@@ -208,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   CircleAvatar(
                                     radius: 12.w,
                                     backgroundImage: NetworkImage(
-                                        userController.user.pfpUrl ),
+                                        userController.user.pfpUrl),
                                     backgroundColor: Colors.grey,
                                   ),
                                   SizedBox(height: 1.h),
@@ -227,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   SizedBox(height: 0.4.h),
                                   Text(
-                                    userController.user.bio ,
+                                    userController.user.bio,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15.sp,
@@ -238,7 +235,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   FutureBuilder<double>(
                                     future: getUsdtPrice(),
                                     builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
                                         return const CircularProgressIndicator();
                                       } else if (snapshot.hasError) {
                                         return Text(
@@ -282,21 +280,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   SizedBox(height: 3.h),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xffb4914b),
+                                          backgroundColor:
+                                              const Color(0xffb4914b),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
                                         ),
                                         onPressed: () {},
                                         icon: const Icon(Icons.arrow_upward),
                                         label: const Text(
                                           "Send",
-                                          style:
-                                              TextStyle(fontWeight: FontWeight.bold),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                       ElevatedButton.icon(
@@ -304,15 +305,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                           backgroundColor: Colors.white,
                                           foregroundColor: Colors.black,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
                                         ),
                                         onPressed: () {},
                                         icon: const Icon(Icons.add),
                                         label: const Text(
                                           "Receive",
-                                          style:
-                                              TextStyle(fontWeight: FontWeight.bold),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ],

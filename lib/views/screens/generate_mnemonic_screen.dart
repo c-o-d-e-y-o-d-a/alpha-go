@@ -2,6 +2,7 @@
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/set_password_screen.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -36,13 +37,32 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
               image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: const Text(
-            'Backup your Seed Phrase',
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.all(1.w),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+            ),
           ),
-          bottom: Constants.appBarBottom,
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+          actionWidgets: SizedBox(
+            width: 76.w,
+            child: Row(
+              children: [
+                Text(
+                  "Backup your Seed Phrase",
+                  style: TextStyle(
+                    color: const Color(0xFFB4914B), // Gold color
+                    fontSize: 18.sp,
+                    fontFamily: 'Cinzel',
+                  ),
+                ),
+               
+              ],
+            ),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.only(left: 5.w, right: 5.w, top: 5.h),

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,11 +75,31 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
           image: DecorationImage(
               image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Wallet Created!"),
-          bottom: Constants.appBarBottom,
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.all(1.w),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+            ),
+          ),
+          actionWidgets: SizedBox(
+            width: 76.w,
+            child: Row(
+              children: [
+                Text(
+                  "Wallet Created!",
+                  style: TextStyle(
+                    color: const Color(0xFFB4914B), // Gold color
+                    fontSize: 20.sp,
+                    fontFamily: 'Cinzel',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         backgroundColor: Colors.transparent,
         body: isLoading
@@ -157,10 +178,8 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                       child: ElevatedButton(
                         style: Constants.buttonStyle,
                         onPressed: () {
-                          
                           if (FirebaseAuth.instance.currentUser != null) {
                             Get.off(const OnboardingScreen());
-                            
                           }
                         },
                         child: const Text("Continue"),

@@ -1,4 +1,3 @@
-
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/golden_button.dart';
@@ -35,17 +34,16 @@ class NFTDetailsPage extends StatelessWidget {
             SizedBox(
               width: 50.w,
               child: Text(
-                
                 userController.user.walletAddress,
                 overflow: TextOverflow.ellipsis,
-                style:  TextStyle(
+                style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xffb4914b),
                 ),
               ),
             ),
-             SizedBox(width: 2.w),
+            SizedBox(width: 2.w),
             GestureDetector(
               onTap: () {
                 Clipboard.setData(

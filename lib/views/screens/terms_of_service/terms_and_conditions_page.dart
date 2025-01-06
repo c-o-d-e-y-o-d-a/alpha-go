@@ -1,3 +1,4 @@
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -49,24 +50,36 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFFB4914B)), // Gold color
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title:  Text(
-          "Terms and Conditions",
-          style: TextStyle(
-            color: const Color(0xFFB4914B), // Gold color
-            fontSize: 20.px,
-            fontWeight: FontWeight.bold,
+      appBar: CustomNavBar(leadingWidget: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B),)), actionWidgets: Row(
+        children: [
+          Text(
+            "Terms and Conditions",
+            style: TextStyle(
+              color: const Color(0xFFB4914B), // Gold color
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        centerTitle: true,
-      ),
+        ],
+      )),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Color(0xFFB4914B)), // Gold color
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //   ),
+      //   title:  Text(
+      //     "Terms and Conditions",
+      //     style: TextStyle(
+      //       color: const Color(0xFFB4914B), // Gold color
+      //       fontSize: 20.px,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: Stack(
         children: [
           // Background Image

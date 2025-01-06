@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:alpha_go/models/const_model.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -46,11 +47,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
               fit: BoxFit.cover)),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Create your profile'),
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          bottom: Constants.appBarBottom,
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.all(1.w),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+            ),
+          ),
+          actionWidgets: SizedBox(
+            width: 76.w,
+            child: Row(
+              children: [
+                Text(
+                  "Create Your Profile",
+                  style: TextStyle(
+                    color: const Color(0xFFB4914B), // Gold color
+                    fontSize: 20.sp,
+                    fontFamily: 'Cinzel',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         backgroundColor: Colors.transparent,
         body: Padding(
@@ -153,11 +174,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             firstName: name.text,
                             lastName: controller.address,
                             id: user.uid, // UID from Firebase Authentication
-                            imageUrl: userController.user.pfpUrl ,
+                            imageUrl: userController.user.pfpUrl,
                           ),
                         );
                         userController.setUser(WalletUser(
-                          pfpUrl: userController.user.pfpUrl ,
+                          pfpUrl: userController.user.pfpUrl,
                           walletAddress: controller.address!,
                           accountName: name.text,
                           bio: bio.text,
