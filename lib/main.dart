@@ -26,10 +26,11 @@ void main() async {
   if (prefs.containsKey("mnemonic") && prefs.getString("mnemonic") != null) {
     controller.mnemonic = prefs.getString("mnemonic")!;
     controller.password = prefs.getString("password")!;
-    runApp(const MyApp(
+    runApp( const MyApp(
         initWidget: SetPasswordScreen(
       isEnter: true,
-    )));
+    )
+    ));
   } else {
     runApp(const MyApp(initWidget: LoginPage()));
   }
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.initWidget});
   final Widget initWidget;
 
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
