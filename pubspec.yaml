@@ -34,7 +34,9 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: 
+  cupertino_icons:
+  # bdk_flutter: 
+  #   path: packages\bdk_flutter-0.31.2
   bdk_flutter:
     git:
       url: https://github.com/M4dhav/bdk-flutter.git 
@@ -49,7 +51,7 @@ dependencies:
   searchfield: ^1.1.7
   get:
   buttons_tabbar:
-  shared_preferences: 
+  shared_preferences: ^2.4.0 
   cloud_firestore:
   firebase_core:
   firebase_messaging:
@@ -66,6 +68,13 @@ dependencies:
   intl: ^0.20.0
   avatar_stack: ^1.2.0
   cached_network_image: 
+  vs_story_designer: ^2.2.0
+
+dependency_overrides:
+  image_gallery_saver:
+    git:
+      url: https://github.com/knottx/image_gallery_saver.git
+      ref: knottx-latest
 
 dev_dependencies:
   flutter_test:

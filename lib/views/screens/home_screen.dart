@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
+import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
@@ -29,15 +30,11 @@ class MapHomePage extends StatefulWidget {
 
 class _MapHomePageState extends State<MapHomePage> {
   ltlng.LatLng? userPos;
-  Image? pointerImage;
+
   mb.MapboxMap? mapboxMap;
   final EventController eventController = Get.find();
   final UserController userController = Get.find();
-  final styleUrl = "mapbox://styles/powerclubglobal/cm2tx1qrp00fy01qw4oga0dqk";
   static final List<String> countries = ['India', 'China', 'Russia'];
-
-  final apiKey =
-      "pk.eyJ1IjoicG93ZXJjbHViZ2xvYmFsIiwiYSI6ImNtMW1mNm52aTBmOGgybG9ranJ5bHEwOW4ifQ.kZ-f73h8hk0CXzjy08OSyg";
 
   Future<Image> downloadImage(String imageUrl) async {
     final File imageFile = await DefaultCacheManager().getSingleFile(imageUrl);
@@ -89,15 +86,7 @@ class _MapHomePageState extends State<MapHomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await requestLocationPermission();
-      mb.MapboxOptions.setAccessToken(apiKey);
-
-      downloadImage(FirebaseAuth.instance.currentUser!.photoURL ??
-              "https://via.placeholder.com/150")
-          .then((value) {
-        setState(() {
-          pointerImage = value;
-        });
-      });
+      mb.MapboxOptions.setAccessToken(Constants.mapboxToken);
       determinePosition().then((value) {
         setState(() {
           userPos = ltlng.LatLng(value.latitude, value.longitude);
@@ -246,7 +235,7 @@ class _MapHomePageState extends State<MapHomePage> {
                 onMapCreated: _onMapCreated,
                 onStyleLoadedListener: _onStyleLoaded,
                 onTapListener: _onTapListener,
-                styleUri: styleUrl,
+                styleUri: Constants.mapboxStyleUrl,
                 cameraOptions: mb.CameraOptions(
                     pitch: 80,
                     center: mb.Point(

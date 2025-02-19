@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
@@ -6,6 +8,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:vs_story_designer/vs_story_designer.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -52,9 +55,23 @@ class _NavBarState extends State<NavBar> {
               color: const Color(0xffb4914b),
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
             if (_selectedIndex == 2) {
-              controller.addPostToTimeline();
+              String path = await controller.takePicture();
+              log(path);
+              //Get.to(StoryEditor());
+              if (path != "") {
+                Get.to(VSStoryDesigner(
+                    onDone: (String uri) {
+                      controller.addPostToTimeline(uri);
+                      Get.back();
+                    },
+                    mediaPath: path,
+                    middleBottomWidget: Container(),
+                    centerText: ''));
+              } else {
+                Get.snackbar('Cancelled', "No Picture taken");
+              }
             }
             setState(() {
               _selectedIndex = 2;

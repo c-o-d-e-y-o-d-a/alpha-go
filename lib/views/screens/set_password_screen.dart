@@ -29,7 +29,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   TextEditingController confirmPassword = TextEditingController();
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
-  final SharedPreferences prefs = Get.find();
+  final SharedPreferencesWithCache prefs = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,16 +105,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     onPressed: () async {
                       // final alphanumeric =
                       //     RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$');
-                          final alphanumeric = RegExp(
-                          r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$');// fix to above regex
+                      final alphanumeric = RegExp(
+                          r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$'); // fix to above regex
 
                       log(alphanumeric.hasMatch(password.text).toString());
                       if (widget.isEnter) {
                         if (password.text == controller.password) {
-                          await controller.createOrRestoreWallet(
-                            Network.bitcoin,
-                          );
-
                           await FirebaseUtils.users
                               .doc(controller.address)
                               .get()

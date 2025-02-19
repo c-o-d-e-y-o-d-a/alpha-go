@@ -47,7 +47,7 @@ class TimelineItem extends StatelessWidget {
               ),
               child: Text(
                 timestamp,
-                style:  TextStyle(
+                style: TextStyle(
                   color: const Color(0xffb4914b),
                   fontSize: 12.px,
                   fontWeight: FontWeight.bold,

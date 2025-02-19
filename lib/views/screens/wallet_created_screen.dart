@@ -23,17 +23,13 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
-  final SharedPreferences prefs = Get.find();
+  final SharedPreferencesWithCache prefs = Get.find();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await controller
-          .createOrRestoreWallet(
-        Network.bitcoin,
-      )
-          .then((value) {
+      await controller.createOrRestoreWallet().then((value) {
         setState(() {
           address.text = controller.address!;
         });
@@ -62,9 +58,10 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
         log("An error has occured ${e.toString()}");
       }
 
-      await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
+      log("prefs set", name: 'Shared Preferences');
+      await controller.syncWallet();
     });
   }
 
@@ -122,46 +119,11 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 5.h),
-                      child: TextFormField(
-                          controller: balance,
-                          style: Constants.inputStyle,
-                          readOnly: true,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 2,
-                          decoration: Constants.inputDecoration.copyWith(
-                            hintText: "Please refresh to fetch wallet balance",
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h),
-                      child: ElevatedButton(
-                        style: Constants.buttonStyle,
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          await controller.syncWallet();
-                          await controller.getBalance().then((value) {
-                            balance.text =
-                                "${controller.balance.toString()} Sats";
-                          });
-                          setState(() {
-                            isLoading = false;
-                          });
-                          log("Refreshed");
-                        },
-                        child: const Text("Refresh"),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h),
                       child: ElevatedButton(
                         style: Constants.buttonStyle,
                         onPressed: () {
-                          
                           if (FirebaseAuth.instance.currentUser != null) {
                             Get.off(const OnboardingScreen());
-                            
                           }
                         },
                         child: const Text("Continue"),

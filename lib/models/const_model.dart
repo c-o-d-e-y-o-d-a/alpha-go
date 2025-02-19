@@ -46,4 +46,9 @@ final class Constants {
       ));
   static const inputStyle =
       TextStyle(color: Colors.white, fontFamily: 'Roboto');
+  static const String mapboxStyleUrl =
+      "mapbox://styles/powerclubglobal/cm2tx1qrp00fy01qw4oga0dqk";
+  static const String mapboxToken =
+      "pk.eyJ1IjoicG93ZXJjbHViZ2xvYmFsIiwiYSI6ImNtMW1mNm52aTBmOGgybG9ranJ5bHEwOW4ifQ.kZ-f73h8hk0CXzjy08OSyg";
+  static const String ordiscanApiKey = "f35541f0-301e-4000-a880-96df4e69db2e";
 }

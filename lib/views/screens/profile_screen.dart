@@ -5,6 +5,7 @@ import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/screens/nft_details_screen.dart';
+import 'package:alpha_go/views/screens/testing_screens/send_token.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:alpha_go/views/widgets/timeline_post_widget.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -25,20 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final TimelinePostController postController = Get.find();
-  bool _isLoading = true;
-  List<Map<String, dynamic>> _results = [];
-  Uint8List? _imageData;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await controller.fetchTransanctions();
-      await _fetchRuneBalances();
-      await _fetchImage();
-      await controller.getBalance();
-    });
-  }
 
   Future<double> getUsdtPrice() async {
     try {
@@ -57,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
         // Extract the rate
         double rate = data['rate'];
 
-        // Convert 2 satoshis to BTC and then to USD
         double priceInUsd = (controller.balance! / 100000000) * rate;
 
         return priceInUsd;
@@ -69,257 +55,233 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
-  Future<void> _fetchRuneBalances() async {
-    final url = Uri.parse(
-        'https://api.hiro.so/runes/v1/addresses/${controller.address ?? ""}/balances?offset=0');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        setState(() {
-          _results = List<Map<String, dynamic>>.from(data['results'] ?? []);
-          _isLoading = false;
-        });
-      } else {
-        throw Exception(
-            'Failed to load balances. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      log('Error fetching balances: $e');
-    }
-  }
-
-  Future<void> _fetchImage() async {
-    final url = Uri.parse(
-        'https://api.hiro.so/ordinals/v1/inscriptions/c5ef6f0eb0b0215a73aba5cae3ed35a005b106ce141f60c186f749545c722e34i0/content');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        setState(() {
-          _imageData = response.bodyBytes;
-        });
-      } else {
-        throw Exception('Failed to load image');
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/bg.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: CustomNavBar(
-          leadingWidget: Row(
-            children: [
-              Container(
-                width: 50.w,
-              
-                child: Text(
-                
-                  userController.user.walletAddress,
-                  
-                  overflow: TextOverflow.ellipsis,
-                  style:  TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xffb4914b),
-                  ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: CustomNavBar(
+        leadingWidget: Row(
+          children: [
+            Container(
+              width: 50.w,
+              child: Text(
+                userController.user.walletAddress,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xffb4914b),
                 ),
               ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: () {
-                  Clipboard.setData(
-                      ClipboardData(text: userController.user.walletAddress));
+            ),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () {
+                Clipboard.setData(
+                    ClipboardData(text: userController.user.walletAddress));
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Username copied!")),
-                  );
-                },
-                child:
-                     Icon(Icons.copy, size: 18.sp, color: const Color(0xffb4914b)),
-              ),
-            ],
-          ),
-          actionWidgets: Row(
-            children: [
-              IconButton(
-                icon:  Icon(Icons.add_box,
-                    size: 26.px, color: const Color(0xffb4914b)),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon:
-                     Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
-                onPressed: () {},
-              ),
-            ],
-          ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Username copied!")),
+                );
+              },
+              child:
+                  Icon(Icons.copy, size: 18.sp, color: const Color(0xffb4914b)),
+            ),
+          ],
         ),
-        body: NestedScrollView(
+        actionWidgets: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.add_box,
+                  size: 26.px, color: const Color(0xffb4914b)),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon:
+                  Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+      body: RefreshIndicator(
+        notificationPredicate: (notification) {
+          return notification.depth == 2;
+        },
+        onRefresh: () async {
+          log('loading');
+          await controller.getUtxo();
+          log(controller.address!);
+          await controller.getBalance();
+        },
+        child: NestedScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(3.h),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              right: 8,
-                              top: 8,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.share),
-                                color: const Color(0xffb4914b),
+                child: SizedBox(
+                  height: 50.1.h,
+                  width: 80.w,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 6.w, right: 6.w, top: 2.h, bottom: 1.h),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.share),
+                                  color: const Color(0xffb4914b),
+                                ),
                               ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: const Color(0xffb4914b)),
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 12.w,
-                                    backgroundImage: NetworkImage(
-                                        userController.user.pfpUrl ),
-                                    backgroundColor: Colors.grey,
-                                  ),
-                                  SizedBox(height: 1.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        userController.user.accountName,
-                                        style: TextStyle(
-                                          color: const Color(0xffb4914b),
-                                          fontSize: 19.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 0.4.h),
-                                  Text(
-                                    userController.user.bio ,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15.sp,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: const Color(0xffb4914b)),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 12.w,
+                                      backgroundImage: NetworkImage(
+                                          userController.user.pfpUrl),
+                                      backgroundColor: Colors.grey,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  FutureBuilder<double>(
-                                    future: getUsdtPrice(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
-                                      } else if (snapshot.hasError) {
-                                        return Text(
-                                          'Error: ${snapshot.error}',
+                                    SizedBox(height: 1.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          userController.user.accountName,
                                           style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 15.sp,
-                                          ),
-                                        );
-                                      } else {
-                                        final price = snapshot.data ?? 0;
-                                        return Column(
-                                          children: [
-                                            Text(
-                                              "Current Balance",
-                                              style: TextStyle(
-                                                color: Colors.white70,
-                                                fontSize: 16.sp,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${controller.balance ?? 0} Sats",
-                                              style: TextStyle(
-                                                color: const Color(0xffb4914b),
-                                                fontSize: 21.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "Price in USDT: $price\$",
-                                              style: TextStyle(
-                                                color: const Color(0xffb4914b),
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xffb4914b),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            color: const Color(0xffb4914b),
+                                            fontSize: 19.sp,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.arrow_upward),
-                                        label: const Text(
-                                          "Send",
-                                          style:
-                                              TextStyle(fontWeight: FontWeight.bold),
-                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 0.4.h),
+                                    Text(
+                                      userController.user.bio,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15.sp,
                                       ),
-                                      ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          foregroundColor: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    FutureBuilder<double>(
+                                      future: getUsdtPrice(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else if (snapshot.hasError) {
+                                          return Text(
+                                            'Error: ${snapshot.error}',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 15.sp,
+                                            ),
+                                          );
+                                        } else {
+                                          final price = snapshot.data ?? 0;
+                                          return Column(
+                                            children: [
+                                              Text(
+                                                "Current Balance",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 16.sp,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${controller.balance ?? 0} Sats",
+                                                style: TextStyle(
+                                                  color:
+                                                      const Color(0xffb4914b),
+                                                  fontSize: 21.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Price in USDT: $price\$",
+                                                style: TextStyle(
+                                                  color:
+                                                      const Color(0xffb4914b),
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xffb4914b),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            // controller.sendSats(
+                                            //     'tb1peaar2wwwpg05dm7jh6j43trvecxfhmmx6x3krznv3nrdthzfw54sz7xnsc',
+                                            //     1000);
+                                          },
+                                          icon: const Icon(Icons.arrow_upward),
+                                          label: const Text(
+                                            "Send",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.add),
-                                        label: const Text(
-                                          "Receive",
-                                          style:
-                                              TextStyle(fontWeight: FontWeight.bold),
+                                        ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.add),
+                                          label: const Text(
+                                            "Receive",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -391,28 +353,43 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           ),
                           ListView.builder(
-                            itemCount: _results.length,
+                            itemCount: controller.runes.length,
                             itemBuilder: (context, index) {
-                              final token = _results[index];
-                              return ListTile(
-                                title: Text(token['ticker'] ?? ""),
-                                subtitle:
-                                    Text("Balance: ${token['balance'] ?? 0}"),
+                              final token =
+                                  controller.runes.values.elementAt(index);
+                              return InkWell(
+                                onTap: () {
+                                  Get.to(TestSendToken(tokenData: token));
+                                },
+                                child: ListTile(
+                                  titleTextStyle:
+                                      TextStyle(color: Colors.white),
+                                  title: Text(token['name']),
+                                  subtitle: Text(
+                                      "Balance: ${token['balance'] ?? 0} ${token['symbol'] ?? ""}"),
+                                ),
                               );
                             },
                           ),
-                          _imageData != null
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => NFTDetailsPage(
-                                          imageData: _imageData,
-                                        ));
-                                  },
-                                  child: Image.memory(_imageData!),
-                                )
-                              : const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                          ListView.builder(
+                            itemCount: controller.ordinals.length,
+                            itemBuilder: (context, index) {
+                              final token =
+                                  controller.ordinals.values.elementAt(index);
+                              String type = token['info']['content_type'];
+                              if (type.contains('image')) {
+                                return Image.network(
+                                    token['info']['content_url']);
+                              } else if (type.contains("text")) {
+                                return Text(
+                                  token['info']['contents'],
+                                  textAlign: TextAlign.center,
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),

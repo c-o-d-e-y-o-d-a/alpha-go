@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:isolate';
+
 import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -16,16 +19,27 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final SharedPreferences prefs =
-      Get.put(await SharedPreferences.getInstance());
+  final SharedPreferencesWithCache prefs =
+      Get.put(await SharedPreferencesWithCache.create(
+    cacheOptions: const SharedPreferencesWithCacheOptions(),
+  ));
+
   final WalletController controller = Get.put(WalletController());
   Get.put(UserController());
-  Get.put(TimelinePostController());
+  final TimelinePostController timelineController =
+      Get.put(TimelinePostController());
   final EventController eventController = Get.put(EventController());
   await eventController.getEvents();
+  await timelineController.getPosts();
   if (prefs.containsKey("mnemonic") && prefs.getString("mnemonic") != null) {
     controller.mnemonic = prefs.getString("mnemonic")!;
     controller.password = prefs.getString("password")!;
+    log(controller.mnemonic!);
+    log("start wallet creation");
+    await controller.createOrRestoreWallet();
+    log("wallet created");
+    controller.initWallet();
+
     runApp(const MyApp(
         initWidget: SetPasswordScreen(
       isEnter: true,
@@ -113,7 +127,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: initWidget,
-      );  
+      );
     });
   }
 }
