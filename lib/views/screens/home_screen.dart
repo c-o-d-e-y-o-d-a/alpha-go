@@ -7,7 +7,9 @@ import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
+import 'package:alpha_go/views/screens/search_page.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -172,58 +174,61 @@ class _MapHomePageState extends State<MapHomePage> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Color(0xffb4914b)),
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(20.sp))),
-          leadingWidth: 17.w,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 3.w),
-            child: Image.asset(
-              'assets/alpha.jpg',
-              fit: BoxFit.contain,
+        appBar: CustomNavBar(
+            leadingWidget: Padding(
+              padding: EdgeInsets.only(left: 3.w),
+              child: Image.asset(
+                'assets/alpha.jpg',
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-          backgroundColor: Colors.black,
-          //bottom: Constants.appBarBottom,
-          automaticallyImplyLeading: false,
-          title: SearchField<String>(
-            searchInputDecoration: SearchInputDecoration(
-                hintText: 'Search',
-                cursorColor: Colors.white,
-                hintStyle: const TextStyle(
-                  color: Color(0xffb4914b),
-                )),
-            marginColor: const Color(0xffb4914b),
-            suggestions: countries
-                .map(
-                  (e) => SearchFieldListItem<String>(e,
-                      item: e,
-                      // Use child to show Custom Widgets in the suggestions
-                      // defaults to Text widget
-                      child: Text(e)),
+            actionWidgets: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const SearchScreen(),
+                        transition: Transition.downToUp,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOutQuad);
+                  },
+                  child: Container(
+                    width: 50.w,
+                    padding: EdgeInsets.only(bottom: 1.h, top: 1.h, right: 2.w),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: const Color(0xffb4914b),
+                          width: 0.4.sp,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Search',
+                      style: TextStyle(
+                        color: const Color(0xffb4914b),
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: 3.w,
+                  ),
+                  child: Center(
+                    child: IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        icon: Icon(
+                          Icons.menu,
+                          color: const Color(0xffb4914b),
+                          size: 29.sp,
+                        )),
+                  ),
                 )
-                .toList(),
-          ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                right: 3.w,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.menu,
-                      color: const Color(0xffb4914b),
-                      size: 29.sp,
-                    )),
-              ),
-            )
-          ],
-        ),
+              ],
+            )),
         body: userPos == null
             ? const Center(
                 child: CircularProgressIndicator(),
