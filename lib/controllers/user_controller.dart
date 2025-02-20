@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class UserController extends GetxController {
   WalletUser user = WalletUser(
+    externalLink: '',
     pfpUrl: '',
     walletAddress: '',
     accountName: '',

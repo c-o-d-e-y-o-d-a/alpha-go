@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/generate_mnemonic_screen.dart';
 import 'package:alpha_go/views/screens/import_mnemonic_screen.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,19 +28,31 @@ class LegalPageState extends State<LegalPage> {
               image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(1.h),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xffb4914b),
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.all(1.w),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+            ),
+          ),
+          actionWidgets: SizedBox(
+            width: 75.w,
+            child: Row(
+              children: [
+                Text(
+                  "Legal",
+                  style: TextStyle(
+                    color: const Color(0xFFB4914B), // Gold color
+                    fontSize: 20.sp,
+                    fontFamily: 'Cinzel',
+                  ),
                 ),
-                height: 0.2.h,
-              )),
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          title: const Text(
-            "Legal",
+                const Spacer()
+              ],
+            ),
           ),
         ),
         body: Padding(

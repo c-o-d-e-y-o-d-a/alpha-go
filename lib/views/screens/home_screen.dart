@@ -8,6 +8,7 @@ import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/screens/search_page.dart';
+import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -172,6 +173,7 @@ class _MapHomePageState extends State<MapHomePage> {
           image: DecorationImage(
               image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
+         drawer: const CustomDrawer(),
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: CustomNavBar(

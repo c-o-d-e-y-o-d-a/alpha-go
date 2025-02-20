@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:alpha_go/models/const_model.dart';
-import 'package:alpha_go/views/screens/home_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,13 +23,16 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
-  final SharedPreferencesWithCache prefs = Get.find();
+  final SharedPreferences prefs = Get.find();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await controller.createOrRestoreWallet().then((value) {
+      await controller
+          .createOrRestoreWallet(
+      )
+          .then((value) {
         setState(() {
           address.text = controller.address!;
         });
@@ -58,10 +61,9 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
         log("An error has occured ${e.toString()}");
       }
 
+      await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
-      log("prefs set", name: 'Shared Preferences');
-      await controller.syncWallet();
     });
   }
 
@@ -72,11 +74,31 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
           image: DecorationImage(
               image: AssetImage('assets/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Wallet Created!"),
-          bottom: Constants.appBarBottom,
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.all(1.w),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+            ),
+          ),
+          actionWidgets: SizedBox(
+            width: 76.w,
+            child: Row(
+              children: [
+                Text(
+                  "Wallet Created!",
+                  style: TextStyle(
+                    color: const Color(0xFFB4914B), // Gold color
+                    fontSize: 20.sp,
+                    fontFamily: 'Cinzel',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         backgroundColor: Colors.transparent,
         body: isLoading
@@ -116,6 +138,39 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
                                   icon: const Icon(
                                     Icons.copy,
                                   )))),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h),
+                      child: TextFormField(
+                          controller: balance,
+                          style: Constants.inputStyle,
+                          readOnly: true,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 2,
+                          decoration: Constants.inputDecoration.copyWith(
+                            hintText: "Please refresh to fetch wallet balance",
+                          )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h),
+                      child: ElevatedButton(
+                        style: Constants.buttonStyle,
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await controller.syncWallet();
+                          await controller.getBalance().then((value) {
+                            balance.text =
+                                "${controller.balance.toString()} Sats";
+                          });
+                          setState(() {
+                            isLoading = false;
+                          });
+                          log("Refreshed");
+                        },
+                        child: const Text("Refresh"),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 5.h),

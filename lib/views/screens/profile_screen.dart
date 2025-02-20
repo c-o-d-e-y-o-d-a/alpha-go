@@ -6,6 +6,7 @@ import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/screens/nft_details_screen.dart';
 import 'package:alpha_go/views/screens/send_token_screen.dart';
+import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:alpha_go/views/widgets/timeline_post_widget.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -58,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       drawer: const CustomDrawer(),
       backgroundColor: Colors.transparent,
       appBar: CustomNavBar(
         leadingWidget: Row(
@@ -131,17 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           alignment: Alignment.topRight,
                           child: Stack(
                             children: [
-                              Positioned(
-                                right: 8,
-                                top: 8,
-                                child: IconButton(
-                                  onPressed: () {
-
-                                  },
-                                  icon: const Icon(Icons.share),
-                                  color: const Color(0xffb4914b),
-                                ),
-                              ),
+                             
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.black,
@@ -152,12 +145,34 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    CircleAvatar(
-                                      radius: 12.w,
-                                      backgroundImage: NetworkImage(
-                                          userController.user.pfpUrl),
-                                      backgroundColor: Colors.grey,
-                                    ),
+                                    Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: CircleAvatar(
+                                          radius: 12.w,
+                                          backgroundImage: NetworkImage(
+                                              userController.user.pfpUrl),
+                                          backgroundColor: Colors.grey,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right:
+                                            0, 
+                                        top:
+                                            2.h, 
+                                        child: IconButton(
+                                          onPressed: () {
+                                          Share.share('Share External Link ${userController.user.externalLink}');
+
+                                          },
+                                          icon: const Icon(Icons.share),
+                                          color: const Color(0xffb4914b),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                     SizedBox(height: 1.h),
                                     Row(
                                       mainAxisAlignment:
@@ -249,6 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             // controller.sendSats(
                                             //     'tb1peaar2wwwpg05dm7jh6j43trvecxfhmmx6x3krznv3nrdthzfw54sz7xnsc',
                                             //     1000);
+                                              
                                           },
                                           icon: const Icon(Icons.arrow_upward),
                                           label: const Text(
@@ -361,7 +377,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   controller.runes.values.elementAt(index);
                               return InkWell(
                                 onTap: () {
-                                  Get.to(SendTokenScreen(tokenData: token));
+                                  Get.to(SendTokenScreen(tokenData: token)); 
                                 },
                                 child: ListTile(
                                   titleTextStyle:
@@ -406,67 +422,3 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-
- 
-        // body: NestedScrollView(
-        //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        //     return [
-        //       SliverToBoxAdapter(
-        //         child: Padding(
-        //           padding: EdgeInsets.all(3.h),
-        //           child: Column(
-        //             children: [
-        //               Align(
-        //                 alignment: Alignment.topRight,
-        //                 child: Stack(
-        //                   children: [
-        //                     Positioned(
-        //                       right: 8,
-        //                       top: 8,
-        //                       child: IconButton(
-        //                         onPressed: () {},
-        //                         icon: const Icon(Icons.share),
-        //                         color: const Color(0xffb4914b),
-        //                       ),
-        //                     ),
-        //                     Container(
-        //                       decoration: BoxDecoration(
-        //                         color: Colors.black,
-        //                         borderRadius: BorderRadius.circular(20),
-        //                         border:
-        //                             Border.all(color: const Color(0xffb4914b)),
-        //                       ),
-        //                       padding: const EdgeInsets.all(16),
-        //                       child: Column(
-        //                         children: [
-        //                           Stack(
-        //                             alignment: Alignment.center,
-        //                             children: [
-        //                               Align(
-        //                                 alignment: Alignment.center,
-        //                                 child: CircleAvatar(
-        //                                   radius: 12.w,
-        //                                   backgroundImage: NetworkImage(
-        //                                       userController.user.pfpUrl),
-        //                                   backgroundColor: Colors.grey,
-        //                                 ),
-        //                               ),
-        //                               Positioned(
-        //                                 right:
-        //                                     0, 
-        //                                 top:
-        //                                     2.h, 
-        //                                 child: IconButton(
-        //                                   onPressed: () {
-        //                                   Share.share('Share External Link ${userController.user.externalLink}');
-
-        //                                   },
-        //                                   icon: const Icon(Icons.share),
-        //                                   color: const Color(0xffb4914b),
-        //                                 ),
-        //                               ),
-        //                             ],
-        //                           ),
-        //                           SizedBox(height: 1.h),
-        //                           Row(
-        //                             mainAxisAlignment: MainAxisAlignment.center,

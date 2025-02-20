@@ -7,7 +7,6 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:http/http.dart' as http;
 
-
 import 'package:path_provider/path_provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -21,7 +20,6 @@ class ChatPage extends StatefulWidget {
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
-
 
 class _ChatPageState extends State<ChatPage> {
   void _handleMessageTap(BuildContext _, types.Message message) async {
@@ -87,7 +85,8 @@ class _ChatPageState extends State<ChatPage> {
           title: const Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage('assets/profile.jpg'), // Profile image
+                backgroundImage:
+                    AssetImage('assets/profile.jpg'), // Profile image
               ),
               SizedBox(width: 10),
               Text('Username', style: TextStyle(color: Color(0xFFB4914B))),
@@ -105,7 +104,8 @@ class _ChatPageState extends State<ChatPage> {
             StreamBuilder<types.Room>(
               initialData: widget.room,
               stream: FirebaseChatCore.instance.room(widget.room.id),
-              builder: (context, snapshot) => StreamBuilder<List<types.Message>>(
+              builder: (context, snapshot) =>
+                  StreamBuilder<List<types.Message>>(
                 initialData: const [],
                 stream: FirebaseChatCore.instance.messages(snapshot.data!),
                 builder: (context, snapshot) => Chat(
@@ -126,8 +126,10 @@ class _ChatPageState extends State<ChatPage> {
                     messageBorderRadius: 10,
                     userAvatarNameColors: const [Colors.blue, Colors.red],
                     userAvatarTextStyle: const TextStyle(color: Colors.white),
-                    receivedMessageBodyTextStyle: const TextStyle(color: Color(0xFFB4914B)),
-                    sentMessageBodyTextStyle: const TextStyle(color: Color(0xFFB4914B)),
+                    receivedMessageBodyTextStyle:
+                        const TextStyle(color: Color(0xFFB4914B)),
+                    sentMessageBodyTextStyle:
+                        const TextStyle(color: Color(0xFFB4914B)),
                     // receivedMessageBorderColor: Color(0xFFB4914B),
                     // sentMessageBorderColor: Color(0xFFB4914B),
                     inputTextColor: Colors.white,

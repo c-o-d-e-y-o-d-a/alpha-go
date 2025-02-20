@@ -1,3 +1,4 @@
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -49,24 +50,43 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFFB4914B)), // Gold color
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title:  Text(
-          "Terms and Conditions",
-          style: TextStyle(
-            color: const Color(0xFFB4914B), // Gold color
-            fontSize: 20.px,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomNavBar(
+          leadingWidget: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Color(0xFFB4914B),
+              )),
+          actionWidgets: Row(
+            children: [
+              Text(
+                "Terms and Conditions",
+                style: TextStyle(
+                  color: const Color(0xFFB4914B), // Gold color
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          )),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Color(0xFFB4914B)), // Gold color
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //   ),
+      //   title:  Text(
+      //     "Terms and Conditions",
+      //     style: TextStyle(
+      //       color: const Color(0xFFB4914B), // Gold color
+      //       fontSize: 20.px,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: Stack(
         children: [
           // Background Image
@@ -81,8 +101,8 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
           // Terms and Conditions Content
           SingleChildScrollView(
             controller: _scrollController,
-            padding:  EdgeInsets.all(16.sp),
-            child:  Column(
+            padding: EdgeInsets.all(16.sp),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Text(
@@ -131,7 +151,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                         const Color.fromARGB(255, 0, 0, 0), // Black background
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      side:  BorderSide(
+                      side: BorderSide(
                         color: const Color(0xFFB4914B), // Gold color
                         width: 0.7.w, // Border width
                       ),
@@ -140,8 +160,9 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                   onPressed: _isAtBottom ? _scrollToTop : _scrollToBottom,
                   child: Text(
                     _isAtBottom ? "Scroll to Top" : "Accept and Continue",
-                    style:
-                        const TextStyle(color: Color(0xFFB4914B), fontWeight: FontWeight.w600), // Gold text
+                    style: const TextStyle(
+                        color: Color(0xFFB4914B),
+                        fontWeight: FontWeight.w600), // Gold text
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -154,7 +175,6 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                       ),
                     ),
                     onPressed: () {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -164,11 +184,11 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                           backgroundColor: Color(0xFFB4914B), // Gold color
                         ),
                       );
-                      
                     },
                     child: const Text(
                       "Accept and Continue",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
                     ),
                   ),
               ],
