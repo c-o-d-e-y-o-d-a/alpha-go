@@ -7,6 +7,7 @@ import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/screens/login_screen.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:alpha_go/views/screens/base_view.dart';
+import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   TextEditingController confirmPassword = TextEditingController();
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
-  final SharedPreferencesWithCache prefs = Get.find();
+  final SharedPreferences prefs = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,19 +42,31 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               fit: BoxFit.cover)),
       child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            bottom: PreferredSize(
-                preferredSize: Size.fromHeight(1.h),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xffb4914b),
+          appBar: CustomNavBar(
+            leadingWidget: Padding(
+              padding: EdgeInsets.all(1.w),
+              child: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon:
+                    const Icon(Icons.arrow_back_ios, color: Color(0xFFB4914B)),
+              ),
+            ),
+            actionWidgets: SizedBox(
+              width: 76.w,
+              child: Row(
+                children: [
+                  Text(
+                    "Set a Password",
+                    style: TextStyle(
+                      color: const Color(0xFFB4914B), // Gold color
+                      fontSize: 18.sp,
+                      fontFamily: 'Cinzel',
+                    ),
                   ),
-                  height: 0.2.h,
-                )),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            title: Text(
-              widget.isEnter ? "Enter your Password" : "Set a Password",
+                ],
+              ),
             ),
           ),
           body: Padding(
@@ -111,6 +124,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       log(alphanumeric.hasMatch(password.text).toString());
                       if (widget.isEnter) {
                         if (password.text == controller.password) {
+                          await controller.createOrRestoreWallet(
+                          );
+
                           await FirebaseUtils.users
                               .doc(controller.address)
                               .get()
@@ -136,7 +152,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                                 accountName: data["accountName"]!,
                                 walletAddress: data["walletAddress"]!,
                                 bio: data["bio"]!,
-                                pfpUrl: data["pfpUrl"]!));
+                                pfpUrl: data["pfpUrl"]!,
+                                externalLink: data["externalLink"]!));
                           });
 
                           Get.off(() => const NavBar());

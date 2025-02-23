@@ -69,6 +69,7 @@ dependencies:
   avatar_stack: ^1.2.0
   cached_network_image: 
   vs_story_designer: ^2.2.0
+  share_plus: ^10.0.0
 
 dependency_overrides:
   image_gallery_saver:
