@@ -3,7 +3,7 @@ import 'package:alpha_go/views/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-enum SearchType { User, Place, Event, NFTs, Tags }
+enum SearchType { user, place, event, nfts, tags }
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -17,7 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<String> filteredSuggestions = [];
   List<String> nfts = ['CryptoPunk', 'Bored Ape', 'Azuki'];
   List<String> places = ['Paris', 'New York', 'Tokyo'];
-  SearchType selectedSearchType = SearchType.User;
+  SearchType selectedSearchType = SearchType.user;
 
   List<String> suggestions = [];
   List<String> tags = ['Art', 'Technology', 'Music'];
@@ -37,19 +37,19 @@ class _SearchScreenState extends State<SearchScreen> {
   void getSuggestions() {
     setState(() {
       switch (selectedSearchType) {
-        case SearchType.User:
+        case SearchType.user:
           suggestions = users;
           break;
-        case SearchType.Place:
+        case SearchType.place:
           suggestions = places;
           break;
-        case SearchType.Event:
+        case SearchType.event:
           suggestions = events;
           break;
-        case SearchType.NFTs:
+        case SearchType.nfts:
           suggestions = nfts;
           break;
-        case SearchType.Tags:
+        case SearchType.tags:
           suggestions = tags;
           break;
       }
@@ -119,8 +119,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
-
-              
               SearchBarWidget(
                 onSearch: (query) {
                   setState(() {
@@ -135,7 +133,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   });
                 },
               ),
-
               SizedBox(height: 4.h),
               Expanded(
                 child: ListView(

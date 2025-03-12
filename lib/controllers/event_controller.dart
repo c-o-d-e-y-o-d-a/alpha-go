@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/firebase_model.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ class EventController extends GetxController {
         events.add(EventModel.fromMap(doc.data()));
       }
     });
+    log(events.length.toString());
   }
 
   Future<void> addEvent(EventModel event) async {

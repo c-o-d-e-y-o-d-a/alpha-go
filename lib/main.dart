@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:isolate';
 
 import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';

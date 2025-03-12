@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
-import 'package:alpha_go/views/screens/nft_details_screen.dart';
 import 'package:alpha_go/views/screens/send_token_screen.dart';
 import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
@@ -65,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: CustomNavBar(
         leadingWidget: Row(
           children: [
-            Container(
+            SizedBox(
               width: 50.w,
               child: Text(
                 userController.user.walletAddress,
@@ -381,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                                 child: ListTile(
                                   titleTextStyle:
-                                      TextStyle(color: Colors.white),
+                                      const TextStyle(color: Colors.white),
                                   title: Text(token['name']),
                                   subtitle: Text(
                                       "Balance: ${token['balance'] ?? 0} ${token['symbol'] ?? ""}"),

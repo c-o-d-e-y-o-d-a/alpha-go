@@ -8,7 +8,6 @@ import 'package:alpha_go/views/screens/login_screen.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:alpha_go/views/screens/base_view.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
-import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +29,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   TextEditingController confirmPassword = TextEditingController();
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
-  final SharedPreferences prefs = Get.find();
+  final SharedPreferencesWithCache prefs = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,8 +123,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       log(alphanumeric.hasMatch(password.text).toString());
                       if (widget.isEnter) {
                         if (password.text == controller.password) {
-                          await controller.createOrRestoreWallet(
-                          );
+                          await controller.createOrRestoreWallet();
 
                           await FirebaseUtils.users
                               .doc(controller.address)
@@ -153,7 +151,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                                 walletAddress: data["walletAddress"]!,
                                 bio: data["bio"]!,
                                 pfpUrl: data["pfpUrl"]!,
-                                externalLink: data["externalLink"]!));
+                                externalLink: data["externalLink"] ?? ""));
                           });
 
                           Get.off(() => const NavBar());

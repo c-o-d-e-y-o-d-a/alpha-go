@@ -31,7 +31,7 @@ final class Constants {
     hintStyle: const TextStyle(color: Colors.white, fontFamily: 'Cinzel'),
     iconColor: Colors.white,
     filled: true,
-    fillColor: Colors.black.withOpacity(0.7),
+    fillColor: Colors.black.withValues(alpha: 0.7),
   );
   static final SearchInputDecoration searchInputDecoration =
       SearchInputDecoration();

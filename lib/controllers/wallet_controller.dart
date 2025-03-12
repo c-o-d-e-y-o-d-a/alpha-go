@@ -193,7 +193,7 @@ class WalletController extends GetxController {
 
       return results;
     } else {
-      print("Request failed with status: ${response.statusCode}");
+      log("Request failed with status: ${response.statusCode}");
       return {};
     }
   }
@@ -220,7 +220,7 @@ class WalletController extends GetxController {
         "transfer_data": results
       };
     } else {
-      print("Request failed with status: ${response.statusCode}");
+      log("Request failed with status: ${response.statusCode}");
     }
   }
 
@@ -275,9 +275,9 @@ class WalletController extends GetxController {
     runes.clear();
     ordinals.clear();
     unspentTokens = wallet.listUnspent();
-    unspentTokens.forEach((element) {
+    for (var element in unspentTokens) {
       log(element.outpoint.txid);
-    });
+    }
     if (unspentTokens.isNotEmpty) {
       for (var token in unspentTokens) {
         bool isRune = await checkRune(token);

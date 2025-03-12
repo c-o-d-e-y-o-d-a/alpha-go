@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
@@ -11,18 +9,14 @@ import 'package:alpha_go/views/screens/search_page.dart';
 import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
-import 'package:image/image.dart' as img;
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:latlong2/latlong.dart' as ltlng;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mb;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:searchfield/searchfield.dart';
 
 class MapHomePage extends StatefulWidget {
   const MapHomePage({super.key});
@@ -37,17 +31,6 @@ class _MapHomePageState extends State<MapHomePage> {
   mb.MapboxMap? mapboxMap;
   final EventController eventController = Get.find();
   final UserController userController = Get.find();
-  static final List<String> countries = ['India', 'China', 'Russia'];
-
-  Future<Image> downloadImage(String imageUrl) async {
-    final File imageFile = await DefaultCacheManager().getSingleFile(imageUrl);
-    final img.Image originalImage =
-        img.decodeImage(imageFile.readAsBytesSync())!;
-    return Image.memory(
-      Uint8List.fromList(img.encodePng(originalImage)),
-      fit: BoxFit.cover,
-    );
-  }
 
   Future<geo.Position> determinePosition() async {
     bool serviceEnabled;
@@ -99,30 +82,45 @@ class _MapHomePageState extends State<MapHomePage> {
     });
   }
 
-  addModelLayer(EventModel event) async {
-    mb.Point location = mb.Point(
-        coordinates:
-            mb.Position(event.location.longitude, event.location.latitude));
+  addModelLayer(List<EventModel> events) async {
+    List<Feature> features = [];
+
+    for (EventModel event in events) {
+      features.add(Feature(
+          id: events.indexOf(event),
+          geometry: Point(
+              coordinates: mb.Position(
+                  event.location.longitude, event.location.latitude)),
+          properties: {
+            'name': event.eventName,
+            'location': event.locationName,
+            'index': events.indexOf(event)
+          }));
+    }
+    FeatureCollection featureCollection = FeatureCollection(features: features);
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");
     }
+    await mapboxMap?.style.addSource(
+        GeoJsonSource(id: "events", data: json.encode(featureCollection)));
 
-    await mapboxMap?.style.addSource(mb.GeoJsonSource(
-        id: "location-${event.eventName.split(' ')[0]}",
-        data: json.encode(location)));
+    await mapboxMap?.style.addStyleModel("eventsModel",
+        "https://github.com/M4dhav/alpha-go/raw/demo-v1.3.1/assets/bitcoin/main.glb");
 
-    final eventModelId = "event-${event.eventName.split(' ')[0]}";
-    const eventModelUri =
-        "https://github.com/M4dhav/alpha-go/raw/dev/assets/bitcoin/scene.gltf";
-    await mapboxMap?.style.addStyleModel(eventModelId, eventModelUri);
-
-    var modelLayer = ModelLayer(
-        id: "modelLayer-${event.eventName.split(' ')[0]}",
-        sourceId: "location-${event.eventName.split(' ')[0]}");
-    modelLayer.modelId = eventModelId;
-    modelLayer.modelScale = [3, 3, 3];
+    var modelLayer = ModelLayer(id: "eventsLayer", sourceId: "events");
+    modelLayer.modelId = "eventsModel";
+    modelLayer.modelScale = [10, 10, 10];
+    // modelLayer.modelRotation = [0, 0, 0];
+    //  modelLayer.modelTranslation = [-20, -20, 0];
     modelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer);
+    await mapboxMap?.style.addLayer(modelLayer);
+    // await mapboxMap?.style.addLayer(CircleLayer(
+    //   circleRadius: 10,
+    //   id: "eventsLayer2",
+    //   sourceId: "events",
+    // ));
+
+    log('added modelLayer');
   }
 
   _onMapCreated(mb.MapboxMap mapboxMap) {
@@ -141,29 +139,50 @@ class _MapHomePageState extends State<MapHomePage> {
     log('puck added');
   }
 
-  _onTapListener(mb.MapContentGestureContext context) async {
-    EventModel tappedEvent = eventController.events.firstWhere((element) =>
-        element.location.latitude.toStringAsPrecision(5) ==
-            context.point.coordinates.lat.toStringAsPrecision(5) &&
-        element.location.longitude.toStringAsPrecision(5) ==
-            context.point.coordinates.lng.toStringAsPrecision(5));
-    List<WalletUser> hosts = [];
-    for (String hostId in tappedEvent.hostId) {
-      hosts.add(await userController.getHost(hostId));
-    }
-    Get.dialog(EventWidget(
-      event: tappedEvent,
-      hosts: hosts,
-    ));
+  // _onTapListener(mb.MapContentGestureContext context) async {
+  //   EventModel tappedEvent = eventController.events.firstWhere((element) =>
+  //       element.location.latitude.toStringAsPrecision(5) ==
+  //           context.point.coordinates.lat.toStringAsPrecision(5) &&
+  //       element.location.longitude.toStringAsPrecision(5) ==
+  //           context.point.coordinates.lng.toStringAsPrecision(5));
+  //   List<WalletUser> hosts = [];
+  //   for (String hostId in tappedEvent.hostId) {
+  //     hosts.add(await userController.getHost(hostId));
+  //   }
+  //   Get.dialog(EventWidget(
+  //     event: tappedEvent,
+  //     hosts: hosts,
+  //   ));
 
-    log('tapped${tappedEvent.eventName}');
-  }
+  //   log('tapped${tappedEvent.eventName}');
+  // }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
-    for (EventModel event in eventController.events) {
-      await addModelLayer(event);
-    }
+    await addModelLayer(eventController.events);
     log('style loaded');
+    mapboxMap!.addInteraction(
+        TapInteraction(
+          FeaturesetDescriptor(
+            layerId: "eventsLayer",
+          ),
+          (feature, context) async {
+            List<WalletUser> hosts = [];
+            EventModel event =
+                eventController.events[feature.properties['index'] as int];
+            for (String hostId in event.hostId) {
+              hosts.add(await userController.getHost(hostId));
+            }
+            Get.dialog(EventWidget(
+              event: event,
+              hosts: hosts,
+            ));
+            //log('click detected on this layer', name: 'level');
+          },
+          stopPropagation: false,
+        ),
+        interactionID: "eventTapInteraction");
+
+    log('loaded interactions');
   }
 
   @override
@@ -173,7 +192,7 @@ class _MapHomePageState extends State<MapHomePage> {
           image: DecorationImage(
               image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
-         drawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: CustomNavBar(
@@ -241,13 +260,16 @@ class _MapHomePageState extends State<MapHomePage> {
                 key: const ValueKey("mapWidget"),
                 onMapCreated: _onMapCreated,
                 onStyleLoadedListener: _onStyleLoaded,
-                onTapListener: _onTapListener,
+                // onTapListener: _onTapListener,
                 styleUri: Constants.mapboxStyleUrl,
                 cameraOptions: mb.CameraOptions(
                     pitch: 80,
                     center: mb.Point(
                         coordinates: mb.Position(
-                            userPos!.longitude, userPos!.latitude + 0.0016)),
+                            2.3561321520770133, 48.857386674033336)),
+                    // center: mb.Point(
+                    //     coordinates: mb.Position(
+                    //         userPos!.longitude, userPos!.latitude + 0.0016)),
                     zoom: 18.0),
               ),
         // floatingActionButton: FloatingActionButton(

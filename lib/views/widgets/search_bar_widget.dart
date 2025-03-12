@@ -12,7 +12,7 @@ class SearchBarWidget extends StatelessWidget {
       onChanged: onSearch,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.black.withOpacity(0.6),
+        fillColor: Colors.black.withValues(alpha: 0.6),
         hintText: 'Search...',
         hintStyle: TextStyle(color: Colors.grey, fontSize: 16.sp),
         border: OutlineInputBorder(

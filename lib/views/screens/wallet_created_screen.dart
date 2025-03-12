@@ -3,7 +3,6 @@ import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
-import 'package:bdk_flutter/bdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,16 +22,13 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController balance = TextEditingController();
   final WalletController controller = Get.find();
-  final SharedPreferences prefs = Get.find();
+  final SharedPreferencesWithCache prefs = Get.find();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await controller
-          .createOrRestoreWallet(
-      )
-          .then((value) {
+      await controller.createOrRestoreWallet().then((value) {
         setState(() {
           address.text = controller.address!;
         });
@@ -60,10 +56,9 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
       } catch (e) {
         log("An error has occured ${e.toString()}");
       }
-
-      await controller.syncWallet();
       await prefs.setString("mnemonic", controller.mnemonic!);
       await prefs.setString("password", controller.password!);
+      await controller.syncWallet();
     });
   }
 

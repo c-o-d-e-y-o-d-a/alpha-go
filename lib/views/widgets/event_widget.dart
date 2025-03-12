@@ -1,4 +1,3 @@
-
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
@@ -37,14 +36,11 @@ class EventWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ClipRRect(
-                  
-                  
                   borderRadius: BorderRadius.circular(20),
                   child: CachedNetworkImage(
                     imageUrl: event.imageUrl,
                     width: 80.w,
                     height: 38.h,
-                    
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(
                         color: Color(0xffb4914b),
@@ -60,6 +56,8 @@ class EventWidget extends StatelessWidget {
                     child: Text(
                       event.eventName,
                       textAlign: TextAlign.left,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 22.px,
                         fontFamily: 'Cinzel',
@@ -81,7 +79,9 @@ class EventWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(width: 2.w,),
+                    SizedBox(
+                      width: 2.w,
+                    ),
                     Text(
                       "Hosted by: ${hosts.map((e) => e.accountName).join(", ")}",
                       style: TextStyle(
@@ -127,9 +127,9 @@ class EventWidget extends StatelessWidget {
                         //   hosts: hosts,
                         // ));
                         Get.to(() => EventDetailsScreen(
-                          event: event,
-                          hosts: hosts,
-                        ));
+                              event: event,
+                              hosts: hosts,
+                            ));
                       },
                       child: Text(
                         "Details",

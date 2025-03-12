@@ -16,50 +16,44 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final UserController userController = Get.find();
-        final SharedPreferences prefs = Get.find();
+    final UserController userController = Get.find();
+    final SharedPreferencesWithCache prefs = Get.find();
 
     return Drawer(
-      
-        shadowColor: const Color(0xffb4914b),
-        surfaceTintColor: const Color.fromARGB(255, 52, 52, 52),
-        elevation: 10.w,
-
-        
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 3.w, top: 10.h, bottom: 8.h),
-              child: Row(
-                children: [
-                  
-                  CircleAvatar(
-                    backgroundColor: const Color(0xffb4914b),
-                    radius: 9.w,
-                    child: CircleAvatar(
-                      radius: 8.w, 
-                      
-                      backgroundImage: CachedNetworkImageProvider(
-                        userController.user.pfpUrl,
-                      ),
+      shadowColor: const Color(0xffb4914b),
+      surfaceTintColor: const Color.fromARGB(255, 52, 52, 52),
+      elevation: 10.w,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 3.w, top: 10.h, bottom: 8.h),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: const Color(0xffb4914b),
+                  radius: 9.w,
+                  child: CircleAvatar(
+                    radius: 8.w,
+                    backgroundImage: CachedNetworkImageProvider(
+                      userController.user.pfpUrl,
                     ),
                   ),
-                  SizedBox(width: 4.w),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      
-                      Text(
-                        userController.user.accountName,
-                        style: TextStyle(
-                          color: const Color(0xffb4914b),
-                          fontSize: 21.px, 
-                        ),
+                ),
+                SizedBox(width: 4.w),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userController.user.accountName,
+                      style: TextStyle(
+                        color: const Color(0xffb4914b),
+                        fontSize: 21.px,
                       ),
-                     Row(
+                    ),
+                    Row(
                       children: [
                         SizedBox(
                           width: 34.w,
@@ -73,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
                             ),
                           ),
                         ),
-                         SizedBox(width: 4.w),
+                        SizedBox(width: 4.w),
                         GestureDetector(
                           onTap: () {
                             Clipboard.setData(ClipboardData(
@@ -89,84 +83,79 @@ class CustomDrawer extends StatelessWidget {
                         SizedBox(width: 1.w),
                       ],
                     ),
-                    ],
-                  ),
-                  
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
-            InkWell(
-              onTap: () {
-                Get.to(const NavBar());
-              },
-              child: ListTile(
-                leading: Icon(Icons.home,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Home',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(const NavBar());
+            },
+            child: ListTile(
+              leading:
+                  Icon(Icons.home, color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-            SizedBox(height: 1.h), 
-            InkWell(
-              onTap: () {
-                Get.to(const ProfilePage());
-              },
-              child: ListTile(
-                leading: Icon(Icons.settings,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          ),
+          SizedBox(height: 1.h),
+          InkWell(
+            onTap: () {
+              Get.to(const ProfilePage());
+            },
+            child: ListTile(
+              leading: Icon(Icons.settings,
+                  color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Profile',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-            SizedBox(height: 1.h), 
-            InkWell(
-              onTap: () {
-                Get.to(const RoomsPage());
-              },
-              child: ListTile(
-                leading: Icon(Icons.contacts,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Messages',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          ),
+          SizedBox(height: 1.h),
+          InkWell(
+            onTap: () {
+              Get.to(const RoomsPage());
+            },
+            child: ListTile(
+              leading: Icon(Icons.contacts,
+                  color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Messages',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-            SizedBox(height: 1.h), 
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: ListTile(
-                leading: Icon(Icons.event,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Events',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          ),
+          SizedBox(height: 1.h),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: ListTile(
+              leading: Icon(Icons.event,
+                  color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Events',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-            SizedBox(height: 1.h),
+          ),
+          SizedBox(height: 1.h),
           InkWell(
             onTap: () {
               Navigator.pop(context);
@@ -183,49 +172,45 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-             SizedBox(height: 12.h), 
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: ListTile(
-                leading: Icon(Icons.contacts,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Contact Us',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          SizedBox(height: 12.h),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: ListTile(
+              leading: Icon(Icons.contacts,
+                  color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Contact Us',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-            SizedBox(height: 1.h), 
-            InkWell(
-              onTap: ()  async{
-               
-                              await prefs.remove('mnemonic');
-                              await prefs.remove('password');
-                              FirebaseAuth.instance.signOut();
-                              Get.offAll(() => const LoginPage());
-                            },
-              
-              child: ListTile(
-                leading: Icon(Icons.logout,
-                    color: const Color(0xffb4914b),
-                    size: 24.px), 
-                title: Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: const Color(0xffb4914b),
-                    fontSize: 24.px,
-                  ),
+          ),
+          SizedBox(height: 1.h),
+          InkWell(
+            onTap: () async {
+              await prefs.remove('mnemonic');
+              await prefs.remove('password');
+              FirebaseAuth.instance.signOut();
+              Get.offAll(() => const LoginPage());
+            },
+            child: ListTile(
+              leading: Icon(Icons.logout,
+                  color: const Color(0xffb4914b), size: 24.px),
+              title: Text(
+                'Logout',
+                style: TextStyle(
+                  color: const Color(0xffb4914b),
+                  fontSize: 24.px,
                 ),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -7,13 +7,13 @@ class SearchResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  InkWell(
+    return InkWell(
       onTap: () {},
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 1.3.h, horizontal: 2.w),
         padding: EdgeInsets.symmetric(vertical: 1.8.h, horizontal: 1.5.w),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
+          color: Colors.black.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: const Color(0xffb4914b),
@@ -47,6 +47,5 @@ class SearchResultTile extends StatelessWidget {
         ),
       ),
     );
-    
   }
 }
