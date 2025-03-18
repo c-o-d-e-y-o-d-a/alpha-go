@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:alpha_go/controllers/biometrics_controller.dart';
 import 'package:alpha_go/controllers/event_controller.dart';
 import 'package:alpha_go/controllers/timeline_post_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -28,8 +29,10 @@ void main() async {
   final TimelinePostController timelineController =
       Get.put(TimelinePostController());
   final EventController eventController = Get.put(EventController());
+  final BiometricsController auth = Get.put(BiometricsController());
   await eventController.getEvents();
   await timelineController.getPosts();
+  await auth.initialize();
   if (prefs.containsKey("mnemonic") && prefs.getString("mnemonic") != null) {
     controller.mnemonic = prefs.getString("mnemonic")!;
     controller.password = prefs.getString("password")!;

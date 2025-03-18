@@ -31,6 +31,7 @@ class _MapHomePageState extends State<MapHomePage> {
   mb.MapboxMap? mapboxMap;
   final EventController eventController = Get.find();
   final UserController userController = Get.find();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<geo.Position> determinePosition() async {
     bool serviceEnabled;
@@ -192,6 +193,7 @@ class _MapHomePageState extends State<MapHomePage> {
           image: DecorationImage(
               image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
+        key: _scaffoldKey,
         drawer: const CustomDrawer(),
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
@@ -239,7 +241,8 @@ class _MapHomePageState extends State<MapHomePage> {
                   child: Center(
                     child: IconButton(
                         onPressed: () {
-                          Scaffold.of(context).openDrawer();
+                          _scaffoldKey.currentState?.openDrawer();
+                          log('opening');
                         },
                         icon: Icon(
                           Icons.menu,

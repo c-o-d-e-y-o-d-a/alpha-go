@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:alpha_go/controllers/biometrics_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
@@ -10,7 +11,9 @@ import 'package:alpha_go/views/screens/base_view.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +33,57 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final SharedPreferencesWithCache prefs = Get.find();
+  final BiometricsController auth = Get.find();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        if (widget.isEnter && auth.isBiometricEnabled.value) {
+          final bool didAuthenticate = await auth.authenticate();
+          if (didAuthenticate) {
+            goToHome();
+          } else {
+            Get.snackbar("Error", "Authentication failed",
+                colorText: Colors.white);
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> goToHome() async {
+    await controller.createOrRestoreWallet();
+
+    await FirebaseUtils.users.doc(controller.address).get().then((value) async {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: "${controller.address}@alphago.com",
+          password: controller.password!,
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          log('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          log('Wrong password provided for that user.');
+        } else {
+          log(e.toString());
+        }
+      }
+      Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+      userController.setUser(WalletUser(
+          accountName: data["accountName"]!,
+          walletAddress: data["walletAddress"]!,
+          bio: data["bio"]!,
+          pfpUrl: data["pfpUrl"]!,
+          externalLink: data["externalLink"] ?? ""));
+    });
+
+    Get.off(() => const NavBar());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -123,38 +177,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       log(alphanumeric.hasMatch(password.text).toString());
                       if (widget.isEnter) {
                         if (password.text == controller.password) {
-                          await controller.createOrRestoreWallet();
-
-                          await FirebaseUtils.users
-                              .doc(controller.address)
-                              .get()
-                              .then((value) async {
-                            try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                email: "${controller.address}@alphago.com",
-                                password: controller.password!,
-                              );
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                log('No user found for that email.');
-                              } else if (e.code == 'wrong-password') {
-                                log('Wrong password provided for that user.');
-                              } else {
-                                log(e.toString());
-                              }
-                            }
-                            Map<String, dynamic> data =
-                                value.data() as Map<String, dynamic>;
-                            userController.setUser(WalletUser(
-                                accountName: data["accountName"]!,
-                                walletAddress: data["walletAddress"]!,
-                                bio: data["bio"]!,
-                                pfpUrl: data["pfpUrl"]!,
-                                externalLink: data["externalLink"] ?? ""));
-                          });
-
-                          Get.off(() => const NavBar());
+                          goToHome();
                         } else {
                           Get.snackbar("Error",
                               "Password does not match, please use the password you set before",
