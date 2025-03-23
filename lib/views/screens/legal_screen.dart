@@ -7,6 +7,7 @@ import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -134,9 +135,11 @@ class LegalPageState extends State<LegalPage> {
                   height: 10.h,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(() => widget.isGenerate
-                          ? const GenerateWalletMnemonic()
-                          : const EnterWalletMnemonic());
+                      context.push(
+                        widget.isGenerate
+                            ? '/generateMnemonic'
+                            : '/enterMnemonic',
+                      );
                     },
                     style: Constants.buttonStyle,
                     child: Text(

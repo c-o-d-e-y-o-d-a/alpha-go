@@ -12,6 +12,7 @@ import 'package:alpha_go/views/screens/base_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -187,7 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         await FirebaseUtils.users
                             .doc(controller.address)
                             .set(userController.user.toJson());
-                        Get.off(() => const NavBar());
+                        context.pushReplacement('/home');
                       },
                       child: const Text('Submit')),
                 ),

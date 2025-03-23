@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,7 +96,10 @@ class CustomDrawer extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Get.to(const NavBar());
+              while (context.canPop()) {
+                context.pop();
+              }
+              context.pushReplacement('/home');
             },
             child: ListTile(
               leading:
@@ -216,7 +220,11 @@ class CustomDrawer extends StatelessWidget {
               await prefs.remove('mnemonic');
               await prefs.remove('password');
               FirebaseAuth.instance.signOut();
-              Get.offAll(() => const LoginPage());
+
+              while (context.canPop()) {
+                context.pop();
+              }
+              context.pushReplacement('/login');
             },
             child: ListTile(
               leading: Icon(Icons.logout,

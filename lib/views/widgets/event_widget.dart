@@ -7,6 +7,7 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class EventWidget extends StatelessWidget {
@@ -98,38 +99,13 @@ class EventWidget extends StatelessWidget {
                   locationName: event.locationName,
                   location: event.location,
                 ),
-                // Text(
-                //   event.locationName,
-                //   style: TextStyle(
-                //     fontSize: 12.px,
-                //     fontFamily: 'Cinzel',
-                //     color: Colors.white,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
-                // Text(
-                //   "${DateFormat('d MMM yyyy, HH:mm').format(event.startTime.toLocal())} to ${DateFormat('d MMM yyyy, HH:mm').format(event.endTime.toLocal())}",
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     fontSize: 12.px,
-                //     fontFamily: 'Cinzel',
-                //     color: Colors.white,
-                //   ),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       style: Constants.buttonStyle,
                       onPressed: () {
-                        // Get.to(EventDetailsScreen(
-                        //   event: event,
-                        //   hosts: hosts,
-                        // ));
-                        Get.to(() => EventDetailsScreen(
-                              event: event,
-                              hosts: hosts,
-                            ));
+                        context.push('/eventDetails', extra: [event, hosts]);
                       },
                       child: Text(
                         "Details",

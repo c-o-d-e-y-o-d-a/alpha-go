@@ -5,6 +5,7 @@ import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class GenerateWalletMnemonic extends StatefulWidget {
@@ -88,9 +89,11 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
                                 await Clipboard.setData(
                                         ClipboardData(text: mnemonic.text))
                                     .then((onCallback) {
-                                  Get.snackbar('Copy Successfull',
-                                      'Your Seed Phrase has been copied to your clipboard',
-                                      colorText: Colors.white);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Seed Phrase copied to clipboard!")),
+                                  );
                                 });
                               }
                             },
@@ -103,7 +106,7 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
                 child: ElevatedButton(
                     style: Constants.buttonStyle,
                     onPressed: () {
-                      Get.to(() => const SetPasswordScreen());
+                      context.go('/setPassword', extra: [false, false]);
                     },
                     child: const Text("Continue")),
               ),

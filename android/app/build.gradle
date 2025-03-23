@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.alpha_go"
+    namespace = "com.alphaprotocol.alpha_go"
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
 

@@ -12,6 +12,7 @@ import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart' as geo;
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart' as ltlng;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mb;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -111,15 +112,8 @@ class _MapHomePageState extends State<MapHomePage> {
     var modelLayer = ModelLayer(id: "eventsLayer", sourceId: "events");
     modelLayer.modelId = "eventsModel";
     modelLayer.modelScale = [10, 10, 10];
-    // modelLayer.modelRotation = [0, 0, 0];
-    //  modelLayer.modelTranslation = [-20, -20, 0];
     modelLayer.modelType = ModelType.COMMON_3D;
     await mapboxMap?.style.addLayer(modelLayer);
-    // await mapboxMap?.style.addLayer(CircleLayer(
-    //   circleRadius: 10,
-    //   id: "eventsLayer2",
-    //   sourceId: "events",
-    // ));
 
     log('added modelLayer');
   }
@@ -140,24 +134,6 @@ class _MapHomePageState extends State<MapHomePage> {
     log('puck added');
   }
 
-  // _onTapListener(mb.MapContentGestureContext context) async {
-  //   EventModel tappedEvent = eventController.events.firstWhere((element) =>
-  //       element.location.latitude.toStringAsPrecision(5) ==
-  //           context.point.coordinates.lat.toStringAsPrecision(5) &&
-  //       element.location.longitude.toStringAsPrecision(5) ==
-  //           context.point.coordinates.lng.toStringAsPrecision(5));
-  //   List<WalletUser> hosts = [];
-  //   for (String hostId in tappedEvent.hostId) {
-  //     hosts.add(await userController.getHost(hostId));
-  //   }
-  //   Get.dialog(EventWidget(
-  //     event: tappedEvent,
-  //     hosts: hosts,
-  //   ));
-
-  //   log('tapped${tappedEvent.eventName}');
-  // }
-
   _onStyleLoaded(StyleLoadedEventData data) async {
     await addModelLayer(eventController.events);
     log('style loaded');
@@ -166,17 +142,26 @@ class _MapHomePageState extends State<MapHomePage> {
           FeaturesetDescriptor(
             layerId: "eventsLayer",
           ),
-          (feature, context) async {
+          (feature, mapContext) async {
             List<WalletUser> hosts = [];
             EventModel event =
                 eventController.events[feature.properties['index'] as int];
             for (String hostId in event.hostId) {
               hosts.add(await userController.getHost(hostId));
             }
-            Get.dialog(EventWidget(
-              event: event,
-              hosts: hosts,
-            ));
+            if (mounted) {
+              showDialog(
+                context: context,
+                builder: (context) => EventWidget(
+                  event: event,
+                  hosts: hosts,
+                ),
+              );
+            }
+            // Get.dialog(EventWidget(
+            //   event: event,
+            //   hosts: hosts,
+            // ));
             //log('click detected on this layer', name: 'level');
           },
           stopPropagation: false,
@@ -209,10 +194,7 @@ class _MapHomePageState extends State<MapHomePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.to(() => const SearchScreen(),
-                        transition: Transition.downToUp,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOutQuad);
+                    context.push("/search");
                   },
                   child: Container(
                     width: 50.w,

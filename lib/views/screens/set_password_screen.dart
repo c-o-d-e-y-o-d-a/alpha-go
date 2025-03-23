@@ -6,13 +6,12 @@ import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/firebase_model.dart';
 import 'package:alpha_go/models/user_model.dart';
 import 'package:alpha_go/views/screens/login_screen.dart';
-import 'package:alpha_go/views/screens/wallet_created_screen.dart';
-import 'package:alpha_go/views/screens/base_view.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,7 +80,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           externalLink: data["externalLink"] ?? ""));
     });
 
-    Get.off(() => const NavBar());
+    while (context.canPop()) {
+      context.pop();
+    }
+    context.pushReplacement(
+      '/home',
+    );
   }
 
   @override
@@ -150,7 +154,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                               await prefs.remove('mnemonic');
                               await prefs.remove('password');
                               FirebaseAuth.instance.signOut();
-                              Get.offAll(() => const LoginPage());
+                              while (context.canPop()) {
+                                context.pop();
+                              }
+                              context.pushReplacement('/login');
                             },
                             child: const Text('Logout')),
                       )
@@ -171,6 +178,16 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     onPressed: () async {
                       // final alphanumeric =
                       //     RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$');
+                      if (password.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please enter a password"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+
+                        return;
+                      }
                       final alphanumeric = RegExp(
                           r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$'); // fix to above regex
 
@@ -179,23 +196,33 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         if (password.text == controller.password) {
                           goToHome();
                         } else {
-                          Get.snackbar("Error",
-                              "Password does not match, please use the password you set before",
-                              colorText: Colors.white);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  "Password does not match, please use the password you set before"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
                         }
                         return;
                       } else if (password.text == confirmPassword.text) {
                         if (!alphanumeric.hasMatch(password.text)) {
-                          Get.snackbar("Weak Password",
-                              "Password must contain at least 1 uppercase letter, 1 number, and be at least 6 characters long",
-                              colorText: Colors.white);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  "Password must contain at least 1 uppercase letter, 1 number, and be at least 6 characters long"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+
                           return;
                         } else {
                           controller.password = password.text;
-
-                          Get.off(() => WalletCreatedScreen(
-                                isImport: widget.isImport,
-                              ));
+                          while (context.canPop()) {
+                            context.pop();
+                          }
+                          context.pushReplacement('/walletCreated',
+                              extra: widget.isImport);
                         }
                       }
                     },
