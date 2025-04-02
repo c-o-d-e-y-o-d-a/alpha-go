@@ -5,7 +5,6 @@ import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/screens/search_page.dart';
 import 'package:alpha_go/views/widgets/drawer_widget.dart';
 import 'package:alpha_go/views/widgets/event_widget.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
@@ -158,11 +157,6 @@ class _MapHomePageState extends State<MapHomePage> {
                 ),
               );
             }
-            // Get.dialog(EventWidget(
-            //   event: event,
-            //   hosts: hosts,
-            // ));
-            //log('click detected on this layer', name: 'level');
           },
           stopPropagation: false,
         ),

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:vs_story_designer/vs_story_designer.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});

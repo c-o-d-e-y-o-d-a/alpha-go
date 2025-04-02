@@ -8,7 +8,6 @@ import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/controllers/wallet_controller.dart';
 import 'package:alpha_go/models/firebase_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/screens/base_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

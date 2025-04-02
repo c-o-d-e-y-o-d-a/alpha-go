@@ -10,8 +10,10 @@ import 'package:alpha_go/views/screens/event_details_screen.dart';
 import 'package:alpha_go/views/screens/generate_mnemonic_screen.dart';
 import 'package:alpha_go/views/screens/import_mnemonic_screen.dart';
 import 'package:alpha_go/views/screens/legal_screen.dart';
+import 'package:alpha_go/views/screens/mint_ordinals_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
 import 'package:alpha_go/views/screens/search_page.dart';
+import 'package:alpha_go/views/screens/send_token_screen.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
@@ -53,11 +55,11 @@ void main() async {
     controller.initWallet();
 
     runApp(MyApp(
-        initWidget: SetPasswordScreen(
+        initWidget: const SetPasswordScreen(
       isEnter: true,
     )));
   } else {
-    runApp(MyApp(initWidget: LoginPage()));
+    runApp(MyApp(initWidget: const LoginPage()));
   }
 }
 
@@ -155,6 +157,15 @@ class MyApp extends StatelessWidget {
               builder: (context, state) => EventDetailsScreen(
                   event: (state.extra as List)[0],
                   hosts: (state.extra as List)[1]),
+            ),
+            GoRoute(
+              path: 'mintOrdinal',
+              builder: (context, state) => const MintOrdinalsScreen(),
+            ),
+            GoRoute(
+              path: 'token',
+              builder: (context, state) => SendTokenScreen(
+                  tokenData: state.extra as Map<String, dynamic>),
             )
           ],
         ),

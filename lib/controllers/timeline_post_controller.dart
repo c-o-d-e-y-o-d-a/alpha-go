@@ -28,7 +28,9 @@ class TimelinePostController extends GetxController {
   Future<String> takePicture() async {
     final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
     if (photo != null) {
+      log(photo.name);
       return photo.path;
     } else {
       return "";

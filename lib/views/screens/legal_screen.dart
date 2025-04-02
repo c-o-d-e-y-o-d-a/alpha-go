@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:alpha_go/models/const_model.dart';
-import 'package:alpha_go/views/screens/generate_mnemonic_screen.dart';
-import 'package:alpha_go/views/screens/import_mnemonic_screen.dart';
 import 'package:alpha_go/views/widgets/navbar_widget.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ class LegalPage extends StatefulWidget {
 }
 
 class LegalPageState extends State<LegalPage> {
-  bool isAuthorised = false;
+  bool isAuthorized = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,18 +109,18 @@ class LegalPageState extends State<LegalPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Authorise Data Collection"),
+                      const Text("Authorize Data Collection"),
                       SizedBox(
                         height: 4.h,
                         width: 20.w,
                         child: AnimatedToggleSwitch<bool>.dual(
-                          current: isAuthorised,
+                          current: isAuthorized,
                           first: false,
                           second: true,
                           fittingMode: FittingMode.preventHorizontalOverlapping,
                           onChanged: (bool value) => setState(() {
                             log(value.toString());
-                            isAuthorised = value;
+                            isAuthorized = value;
                           }),
                         ),
                       )

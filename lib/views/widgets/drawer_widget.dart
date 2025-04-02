@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:alpha_go/controllers/biometrics_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
-import 'package:alpha_go/views/screens/base_view.dart';
-import 'package:alpha_go/views/screens/login_screen.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
 import 'package:alpha_go/views/screens/rooms.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';

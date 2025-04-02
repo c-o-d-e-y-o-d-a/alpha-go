@@ -1,7 +1,5 @@
 import 'package:alpha_go/models/const_model.dart';
-import 'package:alpha_go/views/screens/legal_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

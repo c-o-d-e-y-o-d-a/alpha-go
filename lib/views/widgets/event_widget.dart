@@ -1,12 +1,10 @@
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/screens/event_details_screen.dart';
 import 'package:alpha_go/views/widgets/location_time_widget.dart';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

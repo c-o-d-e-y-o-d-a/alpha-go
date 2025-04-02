@@ -226,14 +226,13 @@ class WalletController extends GetxController {
 
   Future<void> sendSats(String adrStr, int amount) async {
     final TxBuilder txBuilder = TxBuilder();
-    final Address recieverAddress =
+    final Address receiverAddress =
         await Address.fromString(s: adrStr, network: network);
     final FeeRate fee = await blockchain.estimateFee(target: BigInt.from(1));
     log(fee.satPerVb.roundToDouble().toString());
-    final script = recieverAddress.scriptPubkey();
+    final script = receiverAddress.scriptPubkey();
     final psbt = await txBuilder
         .addRecipient(script, BigInt.from(amount))
-
         // .addUtxo(outpoint)
         .feeRate(1.0)
         .finish(wallet);
@@ -250,11 +249,11 @@ class WalletController extends GetxController {
     List<LocalUtxo> utxos,
   ) async {
     final TxBuilder txBuilder = TxBuilder();
-    final Address recieverAddress =
+    final Address receiverAddress =
         await Address.fromString(s: adrStr, network: network);
     final FeeRate fee = await blockchain.estimateFee(target: BigInt.from(1));
     log(fee.satPerVb.roundToDouble().toString());
-    final script = recieverAddress.scriptPubkey();
+    final script = receiverAddress.scriptPubkey();
     final psbt = await txBuilder
         .addRecipient(script, BigInt.from(amount))
         .doNotSpendChange()
