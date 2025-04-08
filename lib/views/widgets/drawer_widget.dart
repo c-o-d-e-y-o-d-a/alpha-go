@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:alpha_go/controllers/biometrics_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
@@ -180,21 +179,23 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           SizedBox(height: 1.h),
-          Obx(
-            () => ListTile(
-              contentPadding: EdgeInsets.only(right: 7.w, left: 16),
-              leading: Icon(Icons.settings,
-                  color: const Color(0xffb4914b), size: 24.px),
-              title: AnimatedToggleSwitch<bool>.dual(
-                current: auth.isBiometricEnabled.value,
-                first: false,
-                second: true,
-                height: 4.h,
-                fittingMode: FittingMode.preventHorizontalOverlapping,
-                onChanged: (bool value) => auth.toggleBiometric(value),
-              ),
-            ),
-          ),
+          auth.canCheckBiometrics
+              ? Obx(
+                  () => ListTile(
+                    contentPadding: EdgeInsets.only(right: 7.w, left: 16),
+                    leading: Icon(Icons.fingerprint,
+                        color: const Color(0xffb4914b), size: 24.px),
+                    title: AnimatedToggleSwitch<bool>.dual(
+                      current: auth.isBiometricEnabled.value,
+                      first: false,
+                      second: true,
+                      height: 4.h,
+                      fittingMode: FittingMode.preventHorizontalOverlapping,
+                      onChanged: (bool value) => auth.toggleBiometric(value),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           SizedBox(height: 6.h),
           InkWell(
             onTap: () {
