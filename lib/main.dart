@@ -16,6 +16,7 @@ import 'package:alpha_go/views/screens/search_page.dart';
 import 'package:alpha_go/views/screens/send_token_screen.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vs_story_designer/vs_story_designer.dart';
 import 'firebase_options.dart';
@@ -28,6 +29,10 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

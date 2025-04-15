@@ -221,7 +221,7 @@ class WalletController extends GetxController {
           "transfer_data": results
         };
         return true;
-      } on RangeError catch (e, stackTrace) {
+      } on RangeError catch (e) {
         log('This is not transferred ordinal');
         return false;
       }
