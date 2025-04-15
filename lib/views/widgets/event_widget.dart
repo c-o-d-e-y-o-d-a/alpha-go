@@ -73,7 +73,7 @@ class EventWidget extends StatelessWidget {
                         height: 2.5.h,
                         borderWidth: 0.5,
                         avatars: [
-                          for (var n = 0; n < event.hostId.length; n++)
+                          for (var n = 0; n < event.hosts.length; n++)
                             NetworkImage(hosts[n].pfpUrl),
                         ],
                       ),

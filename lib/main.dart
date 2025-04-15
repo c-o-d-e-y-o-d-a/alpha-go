@@ -143,6 +143,20 @@ class MyApp extends StatelessWidget {
                       );
                     })),
             GoRoute(
+              path: 'event',
+              builder: (context, state) {
+                final eventName = state.uri.queryParameters['event'];
+                final EventController eventController =
+                    Get.find<EventController>();
+                final event = eventController.events.firstWhere(
+                  (element) {
+                    return element.eventName == eventName?.replaceAll('-', ' ');
+                  },
+                );
+                return EventDetailsScreen(event: event, hosts: event.hosts);
+              },
+            ),
+            GoRoute(
                 path: 'storyDesigner',
                 builder: (context, state) => VSStoryDesigner(
                     onDone: (String uri) {

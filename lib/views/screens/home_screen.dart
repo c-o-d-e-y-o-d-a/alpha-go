@@ -142,18 +142,15 @@ class _MapHomePageState extends State<MapHomePage> {
             layerId: "eventsLayer",
           ),
           (feature, mapContext) async {
-            List<WalletUser> hosts = [];
             EventModel event =
                 eventController.events[feature.properties['index'] as int];
-            for (String hostId in event.hostId) {
-              hosts.add(await userController.getHost(hostId));
-            }
+
             if (mounted) {
               showDialog(
                 context: context,
                 builder: (context) => EventWidget(
                   event: event,
-                  hosts: hosts,
+                  hosts: event.hosts,
                 ),
               );
             }

@@ -1,3 +1,4 @@
+import 'package:alpha_go/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventModel {
@@ -7,7 +8,7 @@ class EventModel {
   final GeoPoint location;
   final DateTime startTime;
   final DateTime endTime;
-  final List<dynamic> hostId;
+  late final List<WalletUser> hosts;
   final String locationName;
   final int cost;
 
@@ -18,7 +19,7 @@ class EventModel {
     required this.location,
     required this.startTime,
     required this.endTime,
-    required this.hostId,
+    required this.hosts,
     required this.cost,
     required this.locationName,
   });
@@ -30,7 +31,6 @@ class EventModel {
         location = map['location'],
         startTime = DateTime.parse(map['startTime']),
         endTime = DateTime.parse(map['endTime']),
-        hostId = map['hostId'],
         cost = map['cost'] ?? 0,
         locationName = map['locationName'];
   Map<String, dynamic> toMap() {
@@ -41,7 +41,7 @@ class EventModel {
       'location': GeoPoint(location.latitude, location.longitude),
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
-      'hostId': hostId,
+      'hostId': hosts.map((host) => host.walletAddress).toList(),
       'cost': cost,
       'locationName': locationName,
     };
