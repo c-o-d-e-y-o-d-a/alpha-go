@@ -65,7 +65,7 @@ dependencies:
   intl: 0.20.0
   avatar_stack: 1.2.0
   cached_network_image: 3.4.0 
-  searchfield: 1.1.7
+  searchfield: 1.2.7
 
 dev_dependencies:
   flutter_test:

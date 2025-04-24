@@ -177,7 +177,7 @@ class _RoomsPageState extends State<RoomsPage> {
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(20.sp),
                           border: Border.all(
-                            width: 0.7,
+                            width: 3.sp,
                             color: const Color(0xffb4914b),
                           ),
                         ),

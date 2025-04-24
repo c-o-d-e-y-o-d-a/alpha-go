@@ -30,8 +30,8 @@ class EventModel {
         location = map['location'],
         startTime = DateTime.parse(map['startTime']),
         endTime = DateTime.parse(map['endTime']),
-        hostId = map['hostId'],
-        cost = map['cost'],
+        hostId = map['hostId'] ,
+        cost = map['cost'] ?? 0,
         locationName = map['locationName'];
   Map<String, dynamic> toMap() {
     return {

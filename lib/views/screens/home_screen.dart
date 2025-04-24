@@ -209,7 +209,7 @@ class _MapHomePageState extends State<MapHomePage> {
                       border: Border(
                         bottom: BorderSide(
                           color: const Color(0xffb4914b), 
-                          width: 0.4.w,
+                          width: 4.sp,
                         ),
                       ),
                     ),
@@ -222,36 +222,7 @@ class _MapHomePageState extends State<MapHomePage> {
                     ),
                   ),
 
-                    // SizedBox(
-                    //   width: 50.w,
-                    //   child: SearchField<String>(
-
-                    //         searchInputDecoration: SearchInputDecoration(
-                    //             hintText: 'Search',
-                    //             cursorColor: Colors.white,
-                    //             hintStyle: const TextStyle(
-                    //               color: Color(0xffb4914b),
-                    //             )),
-
-                    //         suggestions: countries
-                    //             .map(
-                    //               (e) => SearchFieldListItem(e,
-                    //                   item: e,
-
-                    //                   child: Container(
-                    //                     width: double.infinity,
-                    //                     height: double.infinity,
-                    //                     child: Text(
-                    //                       e,
-                    //                       style: const TextStyle(
-                    //                         color: Color(0xffb4914b),
-                    //                       ),
-                    //                     ),
-                    //                   )),
-                    //             )
-                    //             .toList(),
-                    //       ),
-                    // ),
+                   
                     ),
                 Padding(
                   padding: EdgeInsets.only(

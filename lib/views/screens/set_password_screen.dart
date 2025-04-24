@@ -54,7 +54,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               ),
             ),
             actionWidgets: SizedBox(
-              width: 76.w,
+              width: 74.w,
               child: Row(
                 children: [
                   Text(

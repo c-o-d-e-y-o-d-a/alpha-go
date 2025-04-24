@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+               SizedBox(width: 1.w),
               GestureDetector(
                 onTap: () {
                   Clipboard.setData(

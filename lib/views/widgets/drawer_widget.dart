@@ -62,7 +62,7 @@ class CustomDrawer extends StatelessWidget {
                      Row(
                       children: [
                         SizedBox(
-                          width: 40.w,
+                          width: 32.w,
                           child: Text(
                             userController.user.walletAddress,
                             overflow: TextOverflow.ellipsis,
