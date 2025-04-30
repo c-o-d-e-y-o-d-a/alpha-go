@@ -65,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   "Create Your Profile",
                   style: TextStyle(
                     color: const Color(0xFFB4914B), // Gold color
-                    fontSize: 20.sp,
+                    fontSize: 16.sp,
                     fontFamily: 'Cinzel',
                   ),
                 ),

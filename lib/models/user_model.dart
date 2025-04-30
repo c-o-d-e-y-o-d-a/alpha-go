@@ -22,7 +22,7 @@ class WalletUser {
 
   Map<String, dynamic> toJson() {
     return {
-      'pfpUrl': pfpUrl,
+      'pfpUrl': pfpUrl ,
       'walletAddress': walletAddress,
       'accountName': accountName,
       'bio': bio,

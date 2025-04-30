@@ -54,7 +54,7 @@ class _GenerateWalletMnemonicState extends State<GenerateWalletMnemonic> {
                   "Backup your Seed Phrase",
                   style: TextStyle(
                     color: const Color(0xFFB4914B), // Gold color
-                    fontSize: 18.sp,
+                    fontSize: 16.sp,
                     fontFamily: 'Cinzel',
                   ),
                 ),

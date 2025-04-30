@@ -2,7 +2,6 @@
 import 'package:alpha_go/controllers/biometrics_controller.dart';
 import 'package:alpha_go/controllers/user_controller.dart';
 import 'package:alpha_go/views/screens/profile_screen.dart';
-import 'package:alpha_go/views/screens/rooms.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -128,23 +127,7 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           SizedBox(height: 1.h),
-          InkWell(
-            onTap: () {
-              Get.to(const RoomsPage());
-            },
-            child: ListTile(
-              leading: Icon(Icons.contacts,
-                  color: const Color(0xffb4914b), size: 24.px),
-              title: Text(
-                'Messages',
-                style: TextStyle(
-                  color: const Color(0xffb4914b),
-                  fontSize: 24.px,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 1.h),
+          
           InkWell(
             onTap: () {
               Navigator.pop(context);
@@ -185,13 +168,34 @@ class CustomDrawer extends StatelessWidget {
                     contentPadding: EdgeInsets.only(right: 7.w, left: 16),
                     leading: Icon(Icons.fingerprint,
                         color: const Color(0xffb4914b), size: 24.px),
-                    title: AnimatedToggleSwitch<bool>.dual(
-                      current: auth.isBiometricEnabled.value,
-                      first: false,
-                      second: true,
-                      height: 4.h,
-                      fittingMode: FittingMode.preventHorizontalOverlapping,
-                      onChanged: (bool value) => auth.toggleBiometric(value),
+                        
+                    title: Padding(
+                      padding:  EdgeInsets.only(right: 32.w),
+                      child: AnimatedToggleSwitch<bool>.dual(
+                        current: auth.isBiometricEnabled.value,
+                        first: false,
+                        second: true,
+                        height: 3.2.h,
+                        fittingMode: FittingMode.preventHorizontalOverlapping,
+                        onChanged: (bool value) => auth.toggleBiometric(value),
+                         styleBuilder: (value) => ToggleStyle(
+                          backgroundColor: value
+                              ? Colors.green
+                              : Colors.red, // active/inactive color
+                          indicatorColor: Colors.white,
+                        ),
+                        iconBuilder: (value) => Icon(
+                          value ? Icons.lock_open : Icons.lock_outline,
+                          color: value ? Colors.white : Colors.black,
+                        ),
+                        textBuilder: (value) => Text(
+                          value ? "ON" : "OFF",
+                          style: TextStyle(
+                            color: value ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 )
