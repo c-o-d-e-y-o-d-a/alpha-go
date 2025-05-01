@@ -169,14 +169,7 @@ flutter run
 Alpha Go is a cross-platform application built with Flutter that supports:
 - Android
 - iOS
-- Web
-- Windows
-- macOS
-- Linux
 
-## License
-
-This project is proprietary software.
 
 ## Acknowledgements
 
