@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
           log('loading');
 
           await controller.getBalance();
-          await controller.getUtxo();
+          controller.getUtxo();
           log(controller.address!);
         },
         child: NestedScrollView(

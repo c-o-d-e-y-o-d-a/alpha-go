@@ -43,8 +43,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="alphaprotocol.network" />
-                <data android:scheme="https" android:host="alphaprotocol.network"  />
+                <data android:scheme="http" android:host="qlj0m8erupe1dbfau90pi7vdg0.ingress.akash-palmito.org" />
+                <data android:scheme="https" android:host="qlj0m8erupe1dbfau90pi7vdg0.ingress.akash-palmito.org"  />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -198,12 +198,45 @@ class WalletController extends GetxController {
     }
   }
 
-  Future<void> checkOrdinal(LocalUtxo unspentToken) async {
-    String url =
+  Future<bool> checkTransferredOrdinal(LocalUtxo unspentToken) async {
+    String urlTransfer =
         "https://api.ordiscan.com/v1/tx/${unspentToken.outpoint.txid}/inscription-transfers";
 
     var response = await http.get(
-      Uri.parse(url),
+      Uri.parse(urlTransfer),
+      headers: {
+        "Authorization": "Bearer ${Constants.ordiscanApiKey}",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> results =
+            Map<String, dynamic>.from(jsonDecode(response.body)['data'][0]);
+        String ordinalId = results['inscription_id'].toString();
+        Map<String, dynamic> ordinalInfo = await getOrdinalInfo(ordinalId);
+        ordinals[ordinalId] = {
+          "info": ordinalInfo,
+          "utxos": [unspentToken],
+          "transfer_data": results
+        };
+        return true;
+      } on RangeError catch (e) {
+        log('This is not transferred ordinal');
+        return false;
+      }
+    } else {
+      log("Request failed with status: ${response.statusCode}");
+      return false;
+    }
+  }
+
+  Future<void> checkCreatedOrdinal(LocalUtxo unspentToken) async {
+    String urlCreated =
+        "https://api.ordiscan.com/v1/tx/${unspentToken.outpoint.txid}/inscriptions";
+
+    var response = await http.get(
+      Uri.parse(urlCreated),
       headers: {
         "Authorization": "Bearer ${Constants.ordiscanApiKey}",
       },
@@ -282,7 +315,11 @@ class WalletController extends GetxController {
         bool isRune = await checkRune(token);
         if (!isRune) {
           log('checking ordinal');
-          await checkOrdinal(token);
+          bool isTransferredOrdinal = await checkTransferredOrdinal(token);
+          if (!isTransferredOrdinal) {
+            log('checking created ordinal');
+            await checkCreatedOrdinal(token);
+          }
         }
       }
       log(runes.toString());
