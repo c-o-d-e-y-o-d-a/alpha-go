@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final WalletController controller = Get.find();
   final UserController userController = Get.find();
   final TimelinePostController postController = Get.find();
+   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<double> getUsdtPrice() async {
     try {
@@ -59,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: const CustomDrawer(),
       backgroundColor: Colors.transparent,
       appBar: CustomNavBar(
@@ -101,7 +103,9 @@ class _ProfilePageState extends State<ProfilePage> {
             IconButton(
               icon:
                   Icon(Icons.menu, size: 29.px, color: const Color(0xffb4914b)),
-              onPressed: () {},
+              onPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
             ),
           ],
         ),

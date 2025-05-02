@@ -12,7 +12,7 @@ import 'package:alpha_go/views/screens/import_mnemonic_screen.dart';
 import 'package:alpha_go/views/screens/legal_screen.dart';
 import 'package:alpha_go/views/screens/mint_ordinals_screen.dart';
 import 'package:alpha_go/views/screens/onboarding.dart';
-import 'package:alpha_go/views/screens/search_page.dart';
+import 'package:alpha_go/views/screens/search_screen.dart';
 import 'package:alpha_go/views/screens/send_token_screen.dart';
 import 'package:alpha_go/views/screens/wallet_created_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
