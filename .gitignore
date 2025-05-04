@@ -14,6 +14,7 @@ lib/firebase_options.dart
 ios/firebase_app_id_file.json
 android/app/build/
 /lib/views/screens/testing-screens/
+/lib/views/screens/testing_screens/
 # IntelliJ related
 *.iml
 *.ipr
@@ -34,6 +35,7 @@ android/app/build/
 .pub-cache/
 .pub/
 /build/
+.env
 
 # Symbolication related
 app.*.symbols
@@ -45,3 +47,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/.cxx
+/windows/
+/linux/
+/macos/

@@ -1,13 +1,11 @@
-
 import 'package:alpha_go/models/const_model.dart';
 import 'package:alpha_go/models/event_model.dart';
 import 'package:alpha_go/models/user_model.dart';
-import 'package:alpha_go/views/screens/event_details_screen.dart';
 import 'package:alpha_go/views/widgets/location_time_widget.dart';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class EventWidget extends StatelessWidget {
@@ -37,14 +35,11 @@ class EventWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ClipRRect(
-                  
-                  
                   borderRadius: BorderRadius.circular(20),
                   child: CachedNetworkImage(
                     imageUrl: event.imageUrl,
                     width: 80.w,
                     height: 38.h,
-                    
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(
                         color: Color(0xffb4914b),
@@ -60,6 +55,8 @@ class EventWidget extends StatelessWidget {
                     child: Text(
                       event.eventName,
                       textAlign: TextAlign.left,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 22.px,
                         fontFamily: 'Cinzel',
@@ -76,12 +73,14 @@ class EventWidget extends StatelessWidget {
                         height: 2.5.h,
                         borderWidth: 0.5,
                         avatars: [
-                          for (var n = 0; n < event.hostId.length; n++)
+                          for (var n = 0; n < event.hosts.length; n++)
                             NetworkImage(hosts[n].pfpUrl),
                         ],
                       ),
                     ),
-                    SizedBox(width: 2.w,),
+                    SizedBox(
+                      width: 2.w,
+                    ),
                     Text(
                       "Hosted by: ${hosts.map((e) => e.accountName).join(", ")}",
                       style: TextStyle(
@@ -98,38 +97,13 @@ class EventWidget extends StatelessWidget {
                   locationName: event.locationName,
                   location: event.location,
                 ),
-                // Text(
-                //   event.locationName,
-                //   style: TextStyle(
-                //     fontSize: 12.px,
-                //     fontFamily: 'Cinzel',
-                //     color: Colors.white,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
-                // Text(
-                //   "${DateFormat('d MMM yyyy, HH:mm').format(event.startTime.toLocal())} to ${DateFormat('d MMM yyyy, HH:mm').format(event.endTime.toLocal())}",
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     fontSize: 12.px,
-                //     fontFamily: 'Cinzel',
-                //     color: Colors.white,
-                //   ),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       style: Constants.buttonStyle,
                       onPressed: () {
-                        // Get.to(EventDetailsScreen(
-                        //   event: event,
-                        //   hosts: hosts,
-                        // ));
-                        Get.to(() => EventDetailsScreen(
-                          event: event,
-                          hosts: hosts,
-                        ));
+                        context.push('/eventDetails', extra: [event, hosts]);
                       },
                       child: Text(
                         "Details",

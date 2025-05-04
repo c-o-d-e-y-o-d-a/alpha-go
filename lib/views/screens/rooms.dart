@@ -105,44 +105,32 @@ class _RoomsPageState extends State<RoomsPage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: CustomNavBar(leadingWidget: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 2.w),
-          child: const Text('Your Chats', style: TextStyle(color: Color(0xffb4914b)),),
-        ), actionWidgets: IconButton(
-              icon:  Icon(Icons.add, size: 35.px, color: const Color(0xffb4914b),),
-              onPressed: _user == null
-                  ? null
-                  : () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => const UsersPage(),
-                        ),
-                      );
-                    },
-            ),),
-        // appBar: AppBar(
-        //   backgroundColor: Colors.black,
-        //   foregroundColor: const Color(0xffb4914b),
-        //   bottom: Constants.appBarBottom,
-        //   actions: [
-        //     IconButton(
-        //       icon:  Icon(Icons.add, size: 35.px,),
-        //       onPressed: _user == null
-        //           ? null
-        //           : () {
-        //               Navigator.of(context).push(
-        //                 MaterialPageRoute(
-        //                   fullscreenDialog: true,
-        //                   builder: (context) => const UsersPage(),
-        //                 ),
-        //               );
-        //             },
-        //     ),
-        //   ],
-        //   systemOverlayStyle: SystemUiOverlayStyle.light,
-        //   title: const Text('Rooms'),
-        // ),
+        appBar: CustomNavBar(
+          leadingWidget: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2.w),
+            child: const Text(
+              'Your Chats',
+              style: TextStyle(color: Color(0xffb4914b)),
+            ),
+          ),
+          actionWidgets: IconButton(
+            icon: Icon(
+              Icons.add,
+              size: 35.px,
+              color: const Color(0xffb4914b),
+            ),
+            onPressed: _user == null
+                ? null
+                : () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const UsersPage(),
+                      ),
+                    );
+                  },
+          ),
+        ),
         body: Padding(
           padding: EdgeInsets.only(
             top: 2.h,
